@@ -28,3 +28,11 @@ curl -X POST https://TU_API_GATEWAY_URL/iot \
 
 
 verificar en cloud y dynamo si ya se subio
+
+VARIABLE: 
+REGION
+
+SALIDAS:
+1- api gateway (endpoint)
+2- base en dynamo
+3- la funcion lambda
