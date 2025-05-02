@@ -23,6 +23,23 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy" "lambda_dynamodb" {
+  name = "lambda-dynamodb-permissions"
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "dynamodb:PutItem"
+        ],
+        Resource = aws_dynamodb_table.iot_data.arn
+      }
+    ]
+  })
+}
 # ========== DynamoDB ==========
 resource "aws_dynamodb_table" "iot_data" {
   name         = "IoTDataTable"
@@ -67,7 +84,7 @@ resource "aws_apigatewayv2_integration" "lambda_integration" {
 
 resource "aws_apigatewayv2_route" "default_route" {
   api_id    = aws_apigatewayv2_api.http_api.id
-  route_key = "POST /iot"
+  route_key = "$default"
   target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 
