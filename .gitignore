@@ -1,4 +1,4 @@
-S.terraform/
-*.zip
+.terraform/
+
 *.tfstate
 *.tfstate.backup
