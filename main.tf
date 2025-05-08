@@ -73,7 +73,7 @@ resource "aws_apigatewayv2_api" "http_api" {
   name          = "iot-api"
   protocol_type = "HTTP"
 }
-
+# lambda - api gateway / aws_proxy
 resource "aws_apigatewayv2_integration" "lambda_integration" {
   api_id             = aws_apigatewayv2_api.http_api.id
   integration_type   = "AWS_PROXY"
@@ -81,6 +81,7 @@ resource "aws_apigatewayv2_integration" "lambda_integration" {
   integration_method = "POST"
   payload_format_version = "2.0"
 }
+
 
 resource "aws_apigatewayv2_route" "default_route" {
   api_id    = aws_apigatewayv2_api.http_api.id
@@ -94,6 +95,7 @@ resource "aws_apigatewayv2_stage" "default_stage" {
   auto_deploy = true
 }
 
+#lambda - role IAM
 resource "aws_lambda_permission" "allow_apigw" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
@@ -102,7 +104,7 @@ resource "aws_lambda_permission" "allow_apigw" {
   source_arn    = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
 }
 
-# ========== CloudWatch ==========
+# ========== CloudWatch - lambda ==========
 resource "aws_cloudwatch_log_group" "lambda_logs" {
   name              = "/aws/lambda/${aws_lambda_function.iot_processor.function_name}"
   retention_in_days = 7
