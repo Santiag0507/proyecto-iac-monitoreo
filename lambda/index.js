@@ -4,14 +4,17 @@ const client = new DynamoDBClient();
 
 exports.handler = async (event) => {
   try {
-    const body = typeof event.body === "string" ? JSON.parse(event.body) : event.body;
+    const body = event.body ? typeof event.body === "string" ? JSON.parse(event.body) : event.body : {};
+
+    const device_id = body.device_id || "unknown";
+    const value2 = body.value2 !== undefined ? body.value2.toString() : "0";
 
     const command = new PutItemCommand({
       TableName: process.env.DYNAMO_TABLE,
       Item: {
         device_id: { S: body.device_id || "unknown" },
         timestamp: { N: Date.now().toString() },
-        value: { N: body.value?.toString() || "0" },
+        value: { N: value2 },
       },
     });
 
