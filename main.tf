@@ -38,6 +38,23 @@ resource "aws_iam_role_policy" "lambda_dynamodb" {
           "dynamodb:Scan"
         ],
         Resource = aws_dynamodb_table.iot_data.arn
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "sqs:SendMessage",
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes"
+        ],
+        Resource = aws_sqs_queue.iot_alert_queue.arn
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "sns:Publish"
+        ],
+        Resource = aws_sns_topic.iot_alert_topic.arn
       }
     ]
   })
@@ -125,4 +142,66 @@ resource "aws_cloudwatch_log_group" "lambda_logs" {
   for_each          = aws_lambda_function.lambdas
   name              = "/aws/lambda/${each.value.function_name}"
   retention_in_days = 7
+}
+ 
+#MENSAJERIA
+# SQS - Cola de mensaje
+resource "aws_sqs_queue" "iot_alert_queue" {
+  name                      = "iot_alert_queue"
+  visibility_timeout_seconds = 30
+  message_retention_seconds = 86400  # 1 día
+}
+
+#enviar a sqs
+resource "aws_lambda_function" "send_to_sqs" {
+  function_name = "send_to_sqs"
+  handler       = "index.handler"
+  runtime       = "nodejs18.x"
+  filename      = "${path.module}/lambda_send_to_sqs.zip"
+  source_code_hash = filebase64sha256("${path.module}/lambda_send_to_sqs.zip")
+  role          = aws_iam_role.lambda_role.arn
+
+  environment {
+    variables = {
+      SQS_URL = aws_sqs_queue.iot_alert_queue.id
+    }
+  }
+}
+
+# SNS - Topic de alertas
+# ========================
+resource "aws_sns_topic" "iot_alert_topic" {
+  name = "iot_alert_topic"
+}
+
+# ================================
+# SNS - Suscripción por Correo
+# ================================
+resource "aws_sns_topic_subscription" "email_subscription" {
+  topic_arn = aws_sns_topic.iot_alert_topic.arn
+  protocol  = "email"
+  endpoint  = "spacherrest1@upao.edu.pe"  
+}
+
+resource "aws_lambda_function" "sqs_to_sns" {
+  function_name = "sqs_to_sns"
+  handler       = "index.handler"
+  runtime       = "nodejs18.x"
+  filename      = "${path.module}/lambda_sqs_to_sns.zip"
+  source_code_hash = filebase64sha256("${path.module}/lambda_sqs_to_sns.zip")
+  role          = aws_iam_role.lambda_role.arn
+
+  environment {
+    variables = {
+      SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
+    }
+  }
+}
+
+# 🔁 Trigger: SQS → Lambda
+resource "aws_lambda_event_source_mapping" "sqs_trigger" {
+  event_source_arn = aws_sqs_queue.iot_alert_queue.arn
+  function_name    = aws_lambda_function.sqs_to_sns.arn
+  batch_size       = 1
+  enabled          = true
 }
