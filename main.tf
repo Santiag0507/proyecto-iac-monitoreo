@@ -33,13 +33,16 @@ resource "aws_iam_role_policy" "lambda_dynamodb" {
       {
         Effect = "Allow",
         Action = [
-          "dynamodb:PutItem"
+          "dynamodb:PutItem",
+          "dynamodb:GetItem",
+          "dynamodb:Scan"
         ],
         Resource = aws_dynamodb_table.iot_data.arn
       }
     ]
   })
 }
+
 # ========== DynamoDB ==========
 resource "aws_dynamodb_table" "iot_data" {
   name         = "IoTDataTable"
@@ -52,14 +55,25 @@ resource "aws_dynamodb_table" "iot_data" {
   }
 }
 
-# ========== Lambda ==========
-resource "aws_lambda_function" "iot_processor" {
-  filename         = "lambda_function_payload.zip"
-  function_name    = "IoTDataProcessor"
-  role             = aws_iam_role.lambda_role.arn
+# ========== LAMBDAS ==========
+locals {
+  lambdas = {
+    register_device    = "lambda_register_device.zip"
+    store_metrics      = "lambda_store_metrics.zip"
+    alert_system       = "lambda_alert_system.zip"
+    get_dashboard      = "lambda_get_dashboard.zip"
+    generate_report    = "lambda_generate_report.zip"
+  }
+}
+
+resource "aws_lambda_function" "lambdas" {
+  for_each         = local.lambdas
+  function_name    = each.key
+  filename         = "${path.module}/${each.value}"
   handler          = "index.handler"
   runtime          = "nodejs18.x"
-  source_code_hash = filebase64sha256("lambda_function_payload.zip")
+  role             = aws_iam_role.lambda_role.arn
+  source_code_hash = filebase64sha256("${path.module}/${each.value}")
 
   environment {
     variables = {
@@ -73,20 +87,21 @@ resource "aws_apigatewayv2_api" "http_api" {
   name          = "iot-api"
   protocol_type = "HTTP"
 }
-# lambda - api gateway / aws_proxy
+
 resource "aws_apigatewayv2_integration" "lambda_integration" {
-  api_id             = aws_apigatewayv2_api.http_api.id
-  integration_type   = "AWS_PROXY"
-  integration_uri    = aws_lambda_function.iot_processor.invoke_arn
-  integration_method = "POST"
+  for_each             = aws_lambda_function.lambdas
+  api_id               = aws_apigatewayv2_api.http_api.id
+  integration_type     = "AWS_PROXY"
+  integration_uri      = each.value.invoke_arn
+  integration_method   = "POST"
   payload_format_version = "2.0"
 }
 
-
-resource "aws_apigatewayv2_route" "default_route" {
+resource "aws_apigatewayv2_route" "lambda_routes" {
+  for_each  = aws_apigatewayv2_integration.lambda_integration
   api_id    = aws_apigatewayv2_api.http_api.id
-  route_key = "$default"
-  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+  route_key = "POST /${each.key}"
+  target    = "integrations/${each.value.id}"
 }
 
 resource "aws_apigatewayv2_stage" "default_stage" {
@@ -95,17 +110,19 @@ resource "aws_apigatewayv2_stage" "default_stage" {
   auto_deploy = true
 }
 
-#lambda - role IAM
+# ========== Permisos Lambda para API Gateway ==========
 resource "aws_lambda_permission" "allow_apigw" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  for_each     = aws_lambda_function.lambdas
+  statement_id = "AllowExecutionFromAPIGateway-${each.key}"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.iot_processor.function_name
+  function_name = each.value.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
+  source_arn    = "${aws_apigatewayv2_api.http_api.execution_arn}//"
 }
 
-# ========== CloudWatch - lambda ==========
+# ========== CloudWatch Logs ==========
 resource "aws_cloudwatch_log_group" "lambda_logs" {
-  name              = "/aws/lambda/${aws_lambda_function.iot_processor.function_name}"
+  for_each          = aws_lambda_function.lambdas
+  name              = "/aws/lambda/${each.value.function_name}"
   retention_in_days = 7
 }
