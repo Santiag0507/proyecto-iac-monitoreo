@@ -105,6 +105,29 @@ resource "aws_apigatewayv2_api" "http_api" {
   protocol_type = "HTTP"
 }
 
+# ========== Integración y Ruta para send_to_sqs ==========
+resource "aws_apigatewayv2_integration" "send_to_sqs_integration" {
+  api_id             = aws_apigatewayv2_api.http_api.id
+  integration_type   = "AWS_PROXY"
+  integration_uri    = aws_lambda_function.send_to_sqs.invoke_arn
+  integration_method = "POST"
+  payload_format_version = "2.0"
+}
+
+resource "aws_apigatewayv2_route" "send_to_sqs_route" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "POST /send_to_sqs"
+  target    = "integrations/${aws_apigatewayv2_integration.send_to_sqs_integration.id}"
+}
+
+resource "aws_lambda_permission" "allow_apigw_send_to_sqs" {
+  statement_id  = "AllowExecutionFromAPIGatewaySendToSQS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.send_to_sqs.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.http_api.execution_arn}//"
+}
+
 resource "aws_apigatewayv2_integration" "lambda_integration" {
   for_each             = aws_lambda_function.lambdas
   api_id               = aws_apigatewayv2_api.http_api.id
@@ -141,6 +164,11 @@ resource "aws_lambda_permission" "allow_apigw" {
 resource "aws_cloudwatch_log_group" "lambda_logs" {
   for_each          = aws_lambda_function.lambdas
   name              = "/aws/lambda/${each.value.function_name}"
+  retention_in_days = 7
+}
+
+resource "aws_cloudwatch_log_group" "lambda_send_to_sqs_logs" {
+  name              = "/aws/lambda/${aws_lambda_function.send_to_sqs.function_name}"
   retention_in_days = 7
 }
  
@@ -198,7 +226,7 @@ resource "aws_lambda_function" "sqs_to_sns" {
   }
 }
 
-# 🔁 Trigger: SQS → Lambda
+# Trigger: SQS → Lambda
 resource "aws_lambda_event_source_mapping" "sqs_trigger" {
   event_source_arn = aws_sqs_queue.iot_alert_queue.arn
   function_name    = aws_lambda_function.sqs_to_sns.arn
