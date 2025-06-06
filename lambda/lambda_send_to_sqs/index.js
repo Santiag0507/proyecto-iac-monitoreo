@@ -3,9 +3,10 @@ const sqs = new AWS.SQS();
 
 exports.handler = async (event) => {
   const messageBody = {
-    alert: "Temperatura crítica detectada",
-    level: "CRITICAL",
-    timestamp: new Date().toISOString()
+    alert: event.alert || "Mensaje de prueba",
+    level: event.level || "INFO",
+    device_id: event.device_id || "sin_id",
+    timestamp: event.timestamp || new Date().toISOString()
   };
 
   const params = {
