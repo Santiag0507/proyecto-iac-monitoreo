@@ -1,0 +1,30 @@
+{
+  "id": null,
+  "uid": "lambda-logs",
+  "title": "Logs de Lambdas IoT",
+  "tags": ["cloudwatch", "logs"],
+  "timezone": "browser",
+  "schemaVersion": 30,
+  "version": 1,
+  "panels": [
+    {
+      "title": "Errores CRÍTICOS (Lambdas)",
+      "type": "logs",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 12 },
+      "datasource": "CloudWatch",
+      "targets": [
+        {
+          "refId": "A",
+          "region": "us-east-2",
+          "queryMode": "Logs",
+          "logGroupNames": [
+            "/aws/lambda/send_to_sqs",
+            "/aws/lambda/alert_system"
+          ],
+          "expression": "",
+          "query": "fields @timestamp, @message\n| filter @message like /CRITICAL/"
+        }
+      ]
+    }
+  ]
+}
