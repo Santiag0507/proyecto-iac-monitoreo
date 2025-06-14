@@ -70,6 +70,10 @@ resource "aws_dynamodb_table" "iot_data" {
     name = "device_id"
     type = "S"
   }
+
+  point_in_time_recovery {
+    enabled = true
+  } 
 }
 
 # ========== LAMBDAS ==========
