@@ -61,6 +61,12 @@ resource "aws_iam_role_policy" "lambda_dynamodb" {
 }
 
 # ========== DynamoDB ==========
+resource "aws_kms_key" "dynamodb_key" {
+  description             = "CMK for DynamoDB encryption"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+}
+
 resource "aws_dynamodb_table" "iot_data" {
   name         = "IoTDataTable"
   billing_mode = "PAY_PER_REQUEST"
@@ -73,8 +79,14 @@ resource "aws_dynamodb_table" "iot_data" {
 
   point_in_time_recovery {
     enabled = true
-  } 
+  }
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_key.dynamodb_key.arn
+  }
 }
+
 
 # ========== LAMBDAS ==========
 locals {
