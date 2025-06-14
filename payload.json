@@ -1,0 +1,6 @@
+{
+  "alert": "CRITICAL - invocacion directa desde CLI",
+  "level": "CRITICAL",
+  "device_id": "sensor-99",
+  "timestamp": "2025-06-11T10:00:00Z"
+}
