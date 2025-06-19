@@ -396,6 +396,8 @@ resource "aws_lambda_function" "sqs_to_sns" {
   target_arn = aws_sqs_queue.lambda_dlq.arn
 }
 
+reserved_concurrent_executions = 10
+
   # ---- AGREGAR ESTO: ----
   tracing_config {
     mode = "Active"
