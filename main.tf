@@ -23,8 +23,6 @@ data "aws_subnet_ids" "default" {
   vpc_id = data.aws_vpc.default.id
 }
 
-
-
 resource "aws_iam_role" "lambda_role" {
   name               = "lambda-execution-role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
@@ -178,6 +176,12 @@ resource "aws_security_group" "lambda_sg" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "apigw_logs" {
+  name              = "/aws/apigateway/access-logs"
+  retention_in_days = 30
+  kms_key_id        = aws_kms_key.lambda_env_key.arn
+}
+
 resource "aws_lambda_function" "lambdas" {
   for_each         = local.lambdas
   function_name    = each.key
@@ -264,6 +268,21 @@ resource "aws_apigatewayv2_stage" "default_stage" {
   api_id      = aws_apigatewayv2_api.http_api.id
   name        = "$default"
   auto_deploy = true
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.apigw_logs.arn
+    format = jsonencode({
+      requestId               = "$context.requestId"
+      ip                      = "$context.identity.sourceIp"
+      requestTime             = "$context.requestTime"
+      httpMethod              = "$context.httpMethod"
+      routeKey                = "$context.routeKey"
+      status                  = "$context.status"
+      protocol                = "$context.protocol"
+      responseLength          = "$context.responseLength"
+      integrationErrorMessage = "$context.integrationErrorMessage"
+    })
+  }
 }
 
 # ========== Permisos Lambda para API Gateway ==========
@@ -292,6 +311,7 @@ resource "aws_cloudwatch_log_group" "lambda_send_to_sqs_logs" {
 }
 resource "aws_sqs_queue" "lambda_dlq" {
   name = "lambda-dlq"
+  sqs_managed_sse_enabled  = true
 }
  
 #MENSAJERIA
@@ -300,16 +320,17 @@ resource "aws_sqs_queue" "iot_alert_queue" {
   name                      = "iot_alert_queue"
   visibility_timeout_seconds = 30
   message_retention_seconds = 86400  # 1 día
+  sqs_managed_sse_enabled   = true
 }
 
 #enviar a sqs
 resource "aws_lambda_function" "send_to_sqs" {
-  function_name = "send_to_sqs"
-  handler       = "index.handler"
-  runtime       = "nodejs18.x"
-  filename      = "${path.module}/lambda_send_to_sqs.zip"
+  function_name    = "send_to_sqs"
+  handler          = "index.handler"
+  runtime          = "nodejs18.x"
+  filename         = "${path.module}/lambda_send_to_sqs.zip"
   source_code_hash = filebase64sha256("${path.module}/lambda_send_to_sqs.zip")
-  role          = aws_iam_role.lambda_role.arn
+  role             = aws_iam_role.lambda_role.arn
 
   environment {
     variables = {
@@ -317,16 +338,29 @@ resource "aws_lambda_function" "send_to_sqs" {
     }
   }
 
-    vpc_config {
+  tracing_config {
+    mode = "Active"
+  }
+
+  reserved_concurrent_executions = 10
+
+  dead_letter_config {
+    target_arn = aws_sqs_queue.lambda_dlq.arn
+  }
+
+  vpc_config {
     subnet_ids         = data.aws_subnet_ids.default.ids
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
+
+  kms_key_arn = aws_kms_key.lambda_env_key.arn
 }
 
 # SNS - Topic de alertas
 # ========================
 resource "aws_sns_topic" "iot_alert_topic" {
   name = "iot_alert_topic"
+  kms_master_key_id = aws_kms_key.lambda_env_key.arn
 }
 
 # ================================
@@ -339,12 +373,12 @@ resource "aws_sns_topic_subscription" "email_subscription" {
 }
 
 resource "aws_lambda_function" "sqs_to_sns" {
-  function_name = "sqs_to_sns"
-  handler       = "index.handler"
-  runtime       = "nodejs18.x"
-  filename      = "${path.module}/lambda_sqs_to_sns.zip"
+  function_name    = "sqs_to_sns"
+  handler          = "index.handler"
+  runtime          = "nodejs18.x"
+  filename         = "${path.module}/lambda_sqs_to_sns.zip"
   source_code_hash = filebase64sha256("${path.module}/lambda_sqs_to_sns.zip")
-  role          = aws_iam_role.lambda_role.arn
+  role             = aws_iam_role.lambda_role.arn
 
   environment {
     variables = {
@@ -353,6 +387,11 @@ resource "aws_lambda_function" "sqs_to_sns" {
   }
   
   kms_key_arn = aws_kms_key.lambda_env_key.arn
+
+  # ---- AGREGAR ESTO: ----
+  tracing_config {
+    mode = "Active"
+  }
 
   vpc_config {
     subnet_ids         = data.aws_subnet_ids.default.ids
@@ -367,4 +406,3 @@ resource "aws_lambda_event_source_mapping" "sqs_trigger" {
   batch_size       = 1
   enabled          = true
 }
-
