@@ -235,11 +235,12 @@ resource "aws_cloudwatch_log_group" "lambda_logs" {
   for_each          = aws_lambda_function.lambdas
   name              = "/aws/lambda/${each.value.function_name}"
   retention_in_days = 365
+  kms_key_id       = aws_kms_key.lambda_env_key.arn
 }
 
 resource "aws_cloudwatch_log_group" "lambda_send_to_sqs_logs" {
   name              = "/aws/lambda/${aws_lambda_function.send_to_sqs.function_name}"
-  retention_in_days = 7
+  retention_in_days = 365
 }
  
 #MENSAJERIA
