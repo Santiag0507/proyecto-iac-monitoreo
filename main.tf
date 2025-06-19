@@ -99,6 +99,12 @@ locals {
   }
 }
 
+resource "aws_kms_key" "lambda_env_key" {
+  description             = "KMS key for encrypting Lambda environment variables"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+}
+
 resource "aws_lambda_function" "lambdas" {
   for_each         = local.lambdas
   function_name    = each.key
@@ -113,6 +119,9 @@ resource "aws_lambda_function" "lambdas" {
       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
     }
   }
+  
+  kms_key_arn = aws_kms_key.lambda_env_key.arn
+
 }
 
 # ========== API Gateway ==========
