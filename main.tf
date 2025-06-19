@@ -13,6 +13,18 @@ data "aws_iam_policy_document" "lambda_assume_role" {
   }
 }
 
+# Obtener la VPC por defecto
+data "aws_vpc" "default" {
+  default = true
+}
+
+# Obtener todas las subnets de esa VPC
+data "aws_subnet_ids" "default" {
+  vpc_id = data.aws_vpc.default.id
+}
+
+
+
 resource "aws_iam_role" "lambda_role" {
   name               = "lambda-execution-role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
@@ -38,12 +50,35 @@ resource "aws_iam_role_policy" "lambda_dynamodb" {
           "dynamodb:Scan"
         ],
         Resource = aws_dynamodb_table.iot_data.arn
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "sqs:SendMessage",
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes"
+        ],
+        Resource = aws_sqs_queue.iot_alert_queue.arn
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "sns:Publish"
+        ],
+        Resource = aws_sns_topic.iot_alert_topic.arn
       }
     ]
   })
 }
 
 # ========== DynamoDB ==========
+resource "aws_kms_key" "dynamodb_key" {
+  description             = "CMK for DynamoDB encryption"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+}
+
 resource "aws_dynamodb_table" "iot_data" {
   name         = "IoTDataTable"
   billing_mode = "PAY_PER_REQUEST"
@@ -53,7 +88,17 @@ resource "aws_dynamodb_table" "iot_data" {
     name = "device_id"
     type = "S"
   }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_key.dynamodb_key.arn
+  }
 }
+
 
 # ========== LAMBDAS ==========
 locals {
@@ -65,6 +110,45 @@ locals {
     generate_report    = "lambda_generate_report.zip"
   }
 }
+
+resource "aws_kms_key" "lambda_env_key" {
+  description             = "KMS key for encrypting Lambda environment variables"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+}
+
+resource "aws_lambda_code_signing_config" "signing_config" {
+  allowed_publishers {
+    signing_profile_version_arns = [
+      "arn:aws:signer:us-east-1:123456789012:signing-profile/my-signing-profile"
+    ]
+  }
+
+  policies {
+    untrusted_artifact_on_deployment = "Enforce"
+  }
+}
+
+resource "aws_security_group" "lambda_sg" {
+  name        = "lambda-security-group"
+  description = "Security group for Lambda"
+  vpc_id      = data.aws_vpc.default.id
+
+  # checkov:skip=CKV_AWS_382 Reason: Se permite salida total en entorno de pruebas
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
+  }
+}
+
+  vpc_config {
+    subnet_ids         = data.aws_subnet_ids.default.ids
+    security_group_ids = [aws_security_group.lambda_sg.id]
+  }
+
 
 resource "aws_lambda_function" "lambdas" {
   for_each         = local.lambdas
@@ -80,12 +164,44 @@ resource "aws_lambda_function" "lambdas" {
       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
     }
   }
+
+  kms_key_arn = aws_kms_key.lambda_env_key.arn
+  code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+  reserved_concurrent_executions = 10
+  vpc_config {
+    subnet_ids         = data.aws_subnet_ids.default.ids
+    security_group_ids = [aws_security_group.lambda_sg.id]
+  }
+
 }
 
 # ========== API Gateway ==========
 resource "aws_apigatewayv2_api" "http_api" {
   name          = "iot-api"
   protocol_type = "HTTP"
+}
+
+# ========== Integración y Ruta para send_to_sqs ==========
+resource "aws_apigatewayv2_integration" "send_to_sqs_integration" {
+  api_id             = aws_apigatewayv2_api.http_api.id
+  integration_type   = "AWS_PROXY"
+  integration_uri    = aws_lambda_function.send_to_sqs.invoke_arn
+  integration_method = "POST"
+  payload_format_version = "2.0"
+}
+
+resource "aws_apigatewayv2_route" "send_to_sqs_route" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "POST /send_to_sqs"
+  target    = "integrations/${aws_apigatewayv2_integration.send_to_sqs_integration.id}"
+}
+
+resource "aws_lambda_permission" "allow_apigw_send_to_sqs" {
+  statement_id  = "AllowExecutionFromAPIGatewaySendToSQS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.send_to_sqs.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.http_api.execution_arn}//"
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
@@ -126,3 +242,83 @@ resource "aws_cloudwatch_log_group" "lambda_logs" {
   name              = "/aws/lambda/${each.value.function_name}"
   retention_in_days = 7
 }
+
+resource "aws_cloudwatch_log_group" "lambda_send_to_sqs_logs" {
+  name              = "/aws/lambda/${aws_lambda_function.send_to_sqs.function_name}"
+  retention_in_days = 7
+}
+ 
+#MENSAJERIA
+# SQS - Cola de mensaje
+resource "aws_sqs_queue" "iot_alert_queue" {
+  name                      = "iot_alert_queue"
+  visibility_timeout_seconds = 30
+  message_retention_seconds = 86400  # 1 día
+}
+
+#enviar a sqs
+resource "aws_lambda_function" "send_to_sqs" {
+  function_name = "send_to_sqs"
+  handler       = "index.handler"
+  runtime       = "nodejs18.x"
+  filename      = "${path.module}/lambda_send_to_sqs.zip"
+  source_code_hash = filebase64sha256("${path.module}/lambda_send_to_sqs.zip")
+  role          = aws_iam_role.lambda_role.arn
+
+  environment {
+    variables = {
+      SQS_URL = aws_sqs_queue.iot_alert_queue.id
+    }
+  }
+
+    vpc_config {
+    subnet_ids         = data.aws_subnet_ids.default.ids
+    security_group_ids = [aws_security_group.lambda_sg.id]
+  }
+}
+
+# SNS - Topic de alertas
+# ========================
+resource "aws_sns_topic" "iot_alert_topic" {
+  name = "iot_alert_topic"
+}
+
+# ================================
+# SNS - Suscripción por Correo
+# ================================
+resource "aws_sns_topic_subscription" "email_subscription" {
+  topic_arn = aws_sns_topic.iot_alert_topic.arn
+  protocol  = "email"
+  endpoint  = "spacherrest1@upao.edu.pe"  
+}
+
+resource "aws_lambda_function" "sqs_to_sns" {
+  function_name = "sqs_to_sns"
+  handler       = "index.handler"
+  runtime       = "nodejs18.x"
+  filename      = "${path.module}/lambda_sqs_to_sns.zip"
+  source_code_hash = filebase64sha256("${path.module}/lambda_sqs_to_sns.zip")
+  role          = aws_iam_role.lambda_role.arn
+
+  environment {
+    variables = {
+      SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
+    }
+  }
+  
+  kms_key_arn = aws_kms_key.lambda_env_key.arn
+
+  vpc_config {
+    subnet_ids         = data.aws_subnet_ids.default.ids
+    security_group_ids = [aws_security_group.lambda_sg.id]
+  }
+}
+
+# Trigger: SQS → Lambda
+resource "aws_lambda_event_source_mapping" "sqs_trigger" {
+  event_source_arn = aws_sqs_queue.iot_alert_queue.arn
+  function_name    = aws_lambda_function.sqs_to_sns.arn
+  batch_size       = 1
+  enabled          = true
+}
+

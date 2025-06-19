@@ -1,0 +1,1 @@
+{"statusCode":200,"body":"{\"message\":\"✅ Alerta procesada y enviada a SQS\",\"data\":{\"alert\":\"CRITICAL - invocacion directa desde CLI\",\"level\":\"CRITICAL\",\"device_id\":\"sensor-99\",\"timestamp\":\"2025-06-11T10:00:00Z\"},\"result\":\"2f586805-6694-4f01-a138-bfc91809097c\"}"}
