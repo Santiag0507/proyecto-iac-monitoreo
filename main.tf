@@ -166,6 +166,10 @@ resource "aws_lambda_function" "lambdas" {
     subnet_ids         = data.aws_subnet_ids.default.ids
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
+  
+  dead_letter_config {
+    target_arn = aws_sqs_queue.lambda_dlq.arn
+  }
 
 }
 
@@ -213,6 +217,8 @@ resource "aws_apigatewayv2_route" "lambda_routes" {
   api_id    = aws_apigatewayv2_api.http_api.id
   route_key = "POST /${each.key}"
   target    = "integrations/${each.value.id}"
+  authorization_type = "AWS_IAM"
+
 }
 
 resource "aws_apigatewayv2_stage" "default_stage" {
@@ -243,6 +249,10 @@ resource "aws_cloudwatch_log_group" "lambda_send_to_sqs_logs" {
   name              = "/aws/lambda/${aws_lambda_function.send_to_sqs.function_name}"
   retention_in_days = 365
   kms_key_id       = aws_kms_key.lambda_env_key.arn
+  
+}
+resource "aws_sqs_queue" "lambda_dlq" {
+  name = "lambda-dlq"
 }
  
 #MENSAJERIA
