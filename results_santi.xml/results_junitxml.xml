@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
-<testsuites disabled="0" errors="0" failures="26" tests="127" time="0.0">
-	<testsuite disabled="0" errors="0" failures="26" name="terraform scan" skipped="1" tests="127" time="0">
+<testsuites disabled="0" errors="0" failures="25" tests="127" time="0.0">
+	<testsuite disabled="0" errors="0" failures="25" name="terraform scan" skipped="1" tests="127" time="0">
 		<properties>
 			<property name="directory" value="['/app']"/>
 			<property name="add_check" value="False"/>
@@ -79,6 +79,7 @@
 		<testcase name="[NONE][CKV_AWS_45] Ensure no hard-coded secrets exist in lambda environment" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_115] Ensure that AWS Lambda function is configured for function-level concurrent execution limit" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_173] Check encryption settings for Lambda environmental variable" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_309] Ensure API GatewayV2 routes specify an authorization type" classname="/main.tf.aws_apigatewayv2_route.send_to_sqs_route" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_364] Ensure that AWS Lambda function permissions delegated to AWS services are limited by SourceArn or SourceAccount" classname="/main.tf.aws_lambda_permission.allow_apigw_send_to_sqs" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_301] Ensure that AWS Lambda function is not publicly accessible" classname="/main.tf.aws_lambda_permission.allow_apigw_send_to_sqs" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_364] Ensure that AWS Lambda function permissions delegated to AWS services are limited by SourceArn or SourceAccount" classname="/main.tf.aws_lambda_permission.allow_apigw" file="/main.tf"/>
@@ -201,319 +202,306 @@ Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aw
 		170 | }
 </failure>
 		</testcase>
-		<testcase name="[NONE][CKV_AWS_309] Ensure API GatewayV2 routes specify an authorization type" classname="/main.tf.aws_apigatewayv2_route.send_to_sqs_route" file="/main.tf">
-			<failure type="failure" message="Ensure API GatewayV2 routes specify an authorization type">
-Resource: aws_apigatewayv2_route.send_to_sqs_route
-File: /main.tf: 187-191
-Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-309
-
-		187 | resource &quot;aws_apigatewayv2_route&quot; &quot;send_to_sqs_route&quot; {
-		188 |   api_id    = aws_apigatewayv2_api.http_api.id
-		189 |   route_key = &quot;POST /send_to_sqs&quot;
-		190 |   target    = &quot;integrations/${aws_apigatewayv2_integration.send_to_sqs_integration.id}&quot;
-		191 | }
-</failure>
-		</testcase>
 		<testcase name="[NONE][CKV_AWS_309] Ensure API GatewayV2 routes specify an authorization type" classname="/main.tf.aws_apigatewayv2_route.lambda_routes" file="/main.tf">
 			<failure type="failure" message="Ensure API GatewayV2 routes specify an authorization type">
 Resource: aws_apigatewayv2_route.lambda_routes
-File: /main.tf: 210-215
+File: /main.tf: 211-216
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-309
 
-		210 | resource &quot;aws_apigatewayv2_route&quot; &quot;lambda_routes&quot; {
-		211 |   for_each  = aws_apigatewayv2_integration.lambda_integration
-		212 |   api_id    = aws_apigatewayv2_api.http_api.id
-		213 |   route_key = &quot;POST /${each.key}&quot;
-		214 |   target    = &quot;integrations/${each.value.id}&quot;
-		215 | }
+		211 | resource &quot;aws_apigatewayv2_route&quot; &quot;lambda_routes&quot; {
+		212 |   for_each  = aws_apigatewayv2_integration.lambda_integration
+		213 |   api_id    = aws_apigatewayv2_api.http_api.id
+		214 |   route_key = &quot;POST /${each.key}&quot;
+		215 |   target    = &quot;integrations/${each.value.id}&quot;
+		216 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_76] Ensure API Gateway has Access Logging enabled" classname="/main.tf.aws_apigatewayv2_stage.default_stage" file="/main.tf">
 			<failure type="failure" message="Ensure API Gateway has Access Logging enabled">
 Resource: aws_apigatewayv2_stage.default_stage
-File: /main.tf: 217-221
+File: /main.tf: 218-222
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-logging-policies/logging-17
 
-		217 | resource &quot;aws_apigatewayv2_stage&quot; &quot;default_stage&quot; {
-		218 |   api_id      = aws_apigatewayv2_api.http_api.id
-		219 |   name        = &quot;$default&quot;
-		220 |   auto_deploy = true
-		221 | }
+		218 | resource &quot;aws_apigatewayv2_stage&quot; &quot;default_stage&quot; {
+		219 |   api_id      = aws_apigatewayv2_api.http_api.id
+		220 |   name        = &quot;$default&quot;
+		221 |   auto_deploy = true
+		222 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_27] Ensure all data stored in the SQS queue is encrypted" classname="/main.tf.aws_sqs_queue.iot_alert_queue" file="/main.tf">
 			<failure type="failure" message="Ensure all data stored in the SQS queue is encrypted">
 Resource: aws_sqs_queue.iot_alert_queue
-File: /main.tf: 249-253
+File: /main.tf: 250-254
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/general-16-encrypt-sqs-queue
 
-		249 | resource &quot;aws_sqs_queue&quot; &quot;iot_alert_queue&quot; {
-		250 |   name                      = &quot;iot_alert_queue&quot;
-		251 |   visibility_timeout_seconds = 30
-		252 |   message_retention_seconds = 86400  # 1 día
-		253 | }
+		250 | resource &quot;aws_sqs_queue&quot; &quot;iot_alert_queue&quot; {
+		251 |   name                      = &quot;iot_alert_queue&quot;
+		252 |   visibility_timeout_seconds = 30
+		253 |   message_retention_seconds = 86400  # 1 día
+		254 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf">
 			<failure type="failure" message="Ensure AWS Lambda function is configured to validate code-signing">
 Resource: aws_lambda_function.send_to_sqs
-File: /main.tf: 256-274
+File: /main.tf: 257-275
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/bc-aws-272
 
-		256 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
-		257 |   function_name = &quot;send_to_sqs&quot;
-		258 |   handler       = &quot;index.handler&quot;
-		259 |   runtime       = &quot;nodejs18.x&quot;
-		260 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
-		261 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
-		262 |   role          = aws_iam_role.lambda_role.arn
-		263 | 
-		264 |   environment {
-		265 |     variables = {
-		266 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
-		267 |     }
-		268 |   }
-		269 | 
-		270 |     vpc_config {
-		271 |     subnet_ids         = data.aws_subnet_ids.default.ids
-		272 |     security_group_ids = [aws_security_group.lambda_sg.id]
-		273 |   }
-		274 | }
+		257 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
+		258 |   function_name = &quot;send_to_sqs&quot;
+		259 |   handler       = &quot;index.handler&quot;
+		260 |   runtime       = &quot;nodejs18.x&quot;
+		261 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
+		262 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
+		263 |   role          = aws_iam_role.lambda_role.arn
+		264 | 
+		265 |   environment {
+		266 |     variables = {
+		267 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
+		268 |     }
+		269 |   }
+		270 | 
+		271 |     vpc_config {
+		272 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		273 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		274 |   }
+		275 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_50] X-Ray tracing is enabled for Lambda" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf">
 			<failure type="failure" message="X-Ray tracing is enabled for Lambda">
 Resource: aws_lambda_function.send_to_sqs
-File: /main.tf: 256-274
+File: /main.tf: 257-275
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-4
 
-		256 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
-		257 |   function_name = &quot;send_to_sqs&quot;
-		258 |   handler       = &quot;index.handler&quot;
-		259 |   runtime       = &quot;nodejs18.x&quot;
-		260 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
-		261 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
-		262 |   role          = aws_iam_role.lambda_role.arn
-		263 | 
-		264 |   environment {
-		265 |     variables = {
-		266 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
-		267 |     }
-		268 |   }
-		269 | 
-		270 |     vpc_config {
-		271 |     subnet_ids         = data.aws_subnet_ids.default.ids
-		272 |     security_group_ids = [aws_security_group.lambda_sg.id]
-		273 |   }
-		274 | }
+		257 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
+		258 |   function_name = &quot;send_to_sqs&quot;
+		259 |   handler       = &quot;index.handler&quot;
+		260 |   runtime       = &quot;nodejs18.x&quot;
+		261 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
+		262 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
+		263 |   role          = aws_iam_role.lambda_role.arn
+		264 | 
+		265 |   environment {
+		266 |     variables = {
+		267 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
+		268 |     }
+		269 |   }
+		270 | 
+		271 |     vpc_config {
+		272 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		273 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		274 |   }
+		275 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_115] Ensure that AWS Lambda function is configured for function-level concurrent execution limit" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for function-level concurrent execution limit">
 Resource: aws_lambda_function.send_to_sqs
-File: /main.tf: 256-274
+File: /main.tf: 257-275
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-function-level-concurrent-execution-limit
 
-		256 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
-		257 |   function_name = &quot;send_to_sqs&quot;
-		258 |   handler       = &quot;index.handler&quot;
-		259 |   runtime       = &quot;nodejs18.x&quot;
-		260 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
-		261 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
-		262 |   role          = aws_iam_role.lambda_role.arn
-		263 | 
-		264 |   environment {
-		265 |     variables = {
-		266 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
-		267 |     }
-		268 |   }
-		269 | 
-		270 |     vpc_config {
-		271 |     subnet_ids         = data.aws_subnet_ids.default.ids
-		272 |     security_group_ids = [aws_security_group.lambda_sg.id]
-		273 |   }
-		274 | }
+		257 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
+		258 |   function_name = &quot;send_to_sqs&quot;
+		259 |   handler       = &quot;index.handler&quot;
+		260 |   runtime       = &quot;nodejs18.x&quot;
+		261 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
+		262 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
+		263 |   role          = aws_iam_role.lambda_role.arn
+		264 | 
+		265 |   environment {
+		266 |     variables = {
+		267 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
+		268 |     }
+		269 |   }
+		270 | 
+		271 |     vpc_config {
+		272 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		273 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		274 |   }
+		275 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_173] Check encryption settings for Lambda environmental variable" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf">
 			<failure type="failure" message="Check encryption settings for Lambda environmental variable">
 Resource: aws_lambda_function.send_to_sqs
-File: /main.tf: 256-274
+File: /main.tf: 257-275
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-5
 
-		256 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
-		257 |   function_name = &quot;send_to_sqs&quot;
-		258 |   handler       = &quot;index.handler&quot;
-		259 |   runtime       = &quot;nodejs18.x&quot;
-		260 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
-		261 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
-		262 |   role          = aws_iam_role.lambda_role.arn
-		263 | 
-		264 |   environment {
-		265 |     variables = {
-		266 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
-		267 |     }
-		268 |   }
-		269 | 
-		270 |     vpc_config {
-		271 |     subnet_ids         = data.aws_subnet_ids.default.ids
-		272 |     security_group_ids = [aws_security_group.lambda_sg.id]
-		273 |   }
-		274 | }
+		257 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
+		258 |   function_name = &quot;send_to_sqs&quot;
+		259 |   handler       = &quot;index.handler&quot;
+		260 |   runtime       = &quot;nodejs18.x&quot;
+		261 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
+		262 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
+		263 |   role          = aws_iam_role.lambda_role.arn
+		264 | 
+		265 |   environment {
+		266 |     variables = {
+		267 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
+		268 |     }
+		269 |   }
+		270 | 
+		271 |     vpc_config {
+		272 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		273 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		274 |   }
+		275 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_116] Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)">
 Resource: aws_lambda_function.send_to_sqs
-File: /main.tf: 256-274
+File: /main.tf: 257-275
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-a-dead-letter-queue-dlq
 
-		256 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
-		257 |   function_name = &quot;send_to_sqs&quot;
-		258 |   handler       = &quot;index.handler&quot;
-		259 |   runtime       = &quot;nodejs18.x&quot;
-		260 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
-		261 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
-		262 |   role          = aws_iam_role.lambda_role.arn
-		263 | 
-		264 |   environment {
-		265 |     variables = {
-		266 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
-		267 |     }
-		268 |   }
-		269 | 
-		270 |     vpc_config {
-		271 |     subnet_ids         = data.aws_subnet_ids.default.ids
-		272 |     security_group_ids = [aws_security_group.lambda_sg.id]
-		273 |   }
-		274 | }
+		257 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
+		258 |   function_name = &quot;send_to_sqs&quot;
+		259 |   handler       = &quot;index.handler&quot;
+		260 |   runtime       = &quot;nodejs18.x&quot;
+		261 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
+		262 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
+		263 |   role          = aws_iam_role.lambda_role.arn
+		264 | 
+		265 |   environment {
+		266 |     variables = {
+		267 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
+		268 |     }
+		269 |   }
+		270 | 
+		271 |     vpc_config {
+		272 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		273 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		274 |   }
+		275 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_26] Ensure all data stored in the SNS topic is encrypted" classname="/main.tf.aws_sns_topic.iot_alert_topic" file="/main.tf">
 			<failure type="failure" message="Ensure all data stored in the SNS topic is encrypted">
 Resource: aws_sns_topic.iot_alert_topic
-File: /main.tf: 278-280
+File: /main.tf: 279-281
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/general-15
 
-		278 | resource &quot;aws_sns_topic&quot; &quot;iot_alert_topic&quot; {
-		279 |   name = &quot;iot_alert_topic&quot;
-		280 | }
+		279 | resource &quot;aws_sns_topic&quot; &quot;iot_alert_topic&quot; {
+		280 |   name = &quot;iot_alert_topic&quot;
+		281 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf">
 			<failure type="failure" message="Ensure AWS Lambda function is configured to validate code-signing">
 Resource: aws_lambda_function.sqs_to_sns
-File: /main.tf: 291-311
+File: /main.tf: 292-312
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/bc-aws-272
 
-		291 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
-		292 |   function_name = &quot;sqs_to_sns&quot;
-		293 |   handler       = &quot;index.handler&quot;
-		294 |   runtime       = &quot;nodejs18.x&quot;
-		295 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
-		296 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
-		297 |   role          = aws_iam_role.lambda_role.arn
-		298 | 
-		299 |   environment {
-		300 |     variables = {
-		301 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
-		302 |     }
-		303 |   }
-		304 |   
-		305 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		306 | 
-		307 |   vpc_config {
-		308 |     subnet_ids         = data.aws_subnet_ids.default.ids
-		309 |     security_group_ids = [aws_security_group.lambda_sg.id]
-		310 |   }
-		311 | }
+		292 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
+		293 |   function_name = &quot;sqs_to_sns&quot;
+		294 |   handler       = &quot;index.handler&quot;
+		295 |   runtime       = &quot;nodejs18.x&quot;
+		296 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
+		297 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
+		298 |   role          = aws_iam_role.lambda_role.arn
+		299 | 
+		300 |   environment {
+		301 |     variables = {
+		302 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
+		303 |     }
+		304 |   }
+		305 |   
+		306 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		307 | 
+		308 |   vpc_config {
+		309 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		310 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		311 |   }
+		312 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_50] X-Ray tracing is enabled for Lambda" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf">
 			<failure type="failure" message="X-Ray tracing is enabled for Lambda">
 Resource: aws_lambda_function.sqs_to_sns
-File: /main.tf: 291-311
+File: /main.tf: 292-312
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-4
 
-		291 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
-		292 |   function_name = &quot;sqs_to_sns&quot;
-		293 |   handler       = &quot;index.handler&quot;
-		294 |   runtime       = &quot;nodejs18.x&quot;
-		295 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
-		296 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
-		297 |   role          = aws_iam_role.lambda_role.arn
-		298 | 
-		299 |   environment {
-		300 |     variables = {
-		301 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
-		302 |     }
-		303 |   }
-		304 |   
-		305 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		306 | 
-		307 |   vpc_config {
-		308 |     subnet_ids         = data.aws_subnet_ids.default.ids
-		309 |     security_group_ids = [aws_security_group.lambda_sg.id]
-		310 |   }
-		311 | }
+		292 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
+		293 |   function_name = &quot;sqs_to_sns&quot;
+		294 |   handler       = &quot;index.handler&quot;
+		295 |   runtime       = &quot;nodejs18.x&quot;
+		296 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
+		297 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
+		298 |   role          = aws_iam_role.lambda_role.arn
+		299 | 
+		300 |   environment {
+		301 |     variables = {
+		302 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
+		303 |     }
+		304 |   }
+		305 |   
+		306 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		307 | 
+		308 |   vpc_config {
+		309 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		310 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		311 |   }
+		312 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_115] Ensure that AWS Lambda function is configured for function-level concurrent execution limit" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for function-level concurrent execution limit">
 Resource: aws_lambda_function.sqs_to_sns
-File: /main.tf: 291-311
+File: /main.tf: 292-312
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-function-level-concurrent-execution-limit
 
-		291 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
-		292 |   function_name = &quot;sqs_to_sns&quot;
-		293 |   handler       = &quot;index.handler&quot;
-		294 |   runtime       = &quot;nodejs18.x&quot;
-		295 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
-		296 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
-		297 |   role          = aws_iam_role.lambda_role.arn
-		298 | 
-		299 |   environment {
-		300 |     variables = {
-		301 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
-		302 |     }
-		303 |   }
-		304 |   
-		305 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		306 | 
-		307 |   vpc_config {
-		308 |     subnet_ids         = data.aws_subnet_ids.default.ids
-		309 |     security_group_ids = [aws_security_group.lambda_sg.id]
-		310 |   }
-		311 | }
+		292 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
+		293 |   function_name = &quot;sqs_to_sns&quot;
+		294 |   handler       = &quot;index.handler&quot;
+		295 |   runtime       = &quot;nodejs18.x&quot;
+		296 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
+		297 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
+		298 |   role          = aws_iam_role.lambda_role.arn
+		299 | 
+		300 |   environment {
+		301 |     variables = {
+		302 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
+		303 |     }
+		304 |   }
+		305 |   
+		306 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		307 | 
+		308 |   vpc_config {
+		309 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		310 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		311 |   }
+		312 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_116] Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)">
 Resource: aws_lambda_function.sqs_to_sns
-File: /main.tf: 291-311
+File: /main.tf: 292-312
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-a-dead-letter-queue-dlq
 
-		291 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
-		292 |   function_name = &quot;sqs_to_sns&quot;
-		293 |   handler       = &quot;index.handler&quot;
-		294 |   runtime       = &quot;nodejs18.x&quot;
-		295 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
-		296 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
-		297 |   role          = aws_iam_role.lambda_role.arn
-		298 | 
-		299 |   environment {
-		300 |     variables = {
-		301 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
-		302 |     }
-		303 |   }
-		304 |   
-		305 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		306 | 
-		307 |   vpc_config {
-		308 |     subnet_ids         = data.aws_subnet_ids.default.ids
-		309 |     security_group_ids = [aws_security_group.lambda_sg.id]
-		310 |   }
-		311 | }
+		292 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
+		293 |   function_name = &quot;sqs_to_sns&quot;
+		294 |   handler       = &quot;index.handler&quot;
+		295 |   runtime       = &quot;nodejs18.x&quot;
+		296 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
+		297 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
+		298 |   role          = aws_iam_role.lambda_role.arn
+		299 | 
+		300 |   environment {
+		301 |     variables = {
+		302 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
+		303 |     }
+		304 |   }
+		305 |   
+		306 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		307 | 
+		308 |   vpc_config {
+		309 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		310 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		311 |   }
+		312 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_50] X-Ray tracing is enabled for Lambda" classname="/main.tf.aws_lambda_function.lambdas[&quot;generate_report&quot;]" file="/main.tf">

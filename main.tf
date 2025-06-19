@@ -188,6 +188,7 @@ resource "aws_apigatewayv2_route" "send_to_sqs_route" {
   api_id    = aws_apigatewayv2_api.http_api.id
   route_key = "POST /send_to_sqs"
   target    = "integrations/${aws_apigatewayv2_integration.send_to_sqs_integration.id}"
+  authorization_type = "AWS_IAM"
 }
 
 resource "aws_lambda_permission" "allow_apigw_send_to_sqs" {
