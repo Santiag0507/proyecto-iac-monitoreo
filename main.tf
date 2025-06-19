@@ -392,6 +392,10 @@ resource "aws_lambda_function" "sqs_to_sns" {
   
   kms_key_arn = aws_kms_key.lambda_env_key.arn
 
+  dead_letter_config {
+  target_arn = aws_sqs_queue.lambda_dlq.arn
+}
+
   # ---- AGREGAR ESTO: ----
   tracing_config {
     mode = "Active"
