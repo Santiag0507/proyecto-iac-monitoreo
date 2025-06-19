@@ -353,7 +353,7 @@ resource "aws_lambda_function" "send_to_sqs" {
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
 
-  **kms_key_arn = aws_kms_key.lambda_env_key.arn**
+  kms_key_arn = aws_kms_key.lambda_env_key.arn
 }
 
 # SNS - Topic de alertas
