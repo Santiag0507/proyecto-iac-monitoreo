@@ -132,7 +132,24 @@ resource "aws_kms_key" "lambda_env_key" {
   description             = "KMS key for encrypting Lambda environment variables"
   deletion_window_in_days = 10
   enable_key_rotation     = true
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "default"
+    Statement = [
+      {
+        Sid       = "Enable IAM User Permissions"
+        Effect    = "Allow"
+        Principal = {
+          AWS = "*"
+        }
+        Action    = "kms:*"
+        Resource  = "*"
+      }
+    ]
+  })
 }
+
 
 resource "aws_lambda_code_signing_config" "signing_config" {
   allowed_publishers {
