@@ -324,12 +324,12 @@ resource "aws_sqs_queue" "iot_alert_queue" {
 
 #enviar a sqs
 resource "aws_lambda_function" "send_to_sqs" {
-  function_name = "send_to_sqs"
-  handler       = "index.handler"
-  runtime       = "nodejs18.x"
-  filename      = "${path.module}/lambda_send_to_sqs.zip"
+  function_name    = "send_to_sqs"
+  handler          = "index.handler"
+  runtime          = "nodejs18.x"
+  filename         = "${path.module}/lambda_send_to_sqs.zip"
   source_code_hash = filebase64sha256("${path.module}/lambda_send_to_sqs.zip")
-  role          = aws_iam_role.lambda_role.arn
+  role             = aws_iam_role.lambda_role.arn
 
   environment {
     variables = {
@@ -337,7 +337,11 @@ resource "aws_lambda_function" "send_to_sqs" {
     }
   }
 
-    vpc_config {
+  tracing_config {
+    mode = "Active"
+  }
+
+  vpc_config {
     subnet_ids         = data.aws_subnet_ids.default.ids
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
