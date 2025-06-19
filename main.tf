@@ -84,7 +84,7 @@ resource "aws_kms_key" "dynamodb_key" {
         Sid       = "Enable IAM User Permissions"
         Effect    = "Allow"
         Principal = {
-          AWS = "*"
+          AWS = "arn:aws:iam::111122223333:root"
         }
         Action    = "kms:*"
         Resource  = "*"
@@ -139,7 +139,7 @@ resource "aws_kms_key" "lambda_env_key" {
         Sid       = "Enable IAM User Permissions"
         Effect    = "Allow"
         Principal = {
-          AWS = "*"
+          AWS = "arn:aws:iam::123456789012:root"
         }
         Action    = "kms:*"
         Resource  = "*"
