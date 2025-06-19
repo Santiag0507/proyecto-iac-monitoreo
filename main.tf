@@ -77,7 +77,24 @@ resource "aws_kms_key" "dynamodb_key" {
   description             = "CMK for DynamoDB encryption"
   deletion_window_in_days = 10
   enable_key_rotation     = true
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "default"
+    Statement = [
+      {
+        Sid       = "Enable IAM User Permissions"
+        Effect    = "Allow"
+        Principal = {
+          AWS = "*"
+        }
+        Action    = "kms:*"
+        Resource  = "*"
+      }
+    ]
+  })
 }
+
 
 resource "aws_dynamodb_table" "iot_data" {
   name         = "IoTDataTable"
@@ -115,7 +132,24 @@ resource "aws_kms_key" "lambda_env_key" {
   description             = "KMS key for encrypting Lambda environment variables"
   deletion_window_in_days = 10
   enable_key_rotation     = true
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "default"
+    Statement = [
+      {
+        Sid       = "Enable IAM User Permissions"
+        Effect    = "Allow"
+        Principal = {
+          AWS = "*"
+        }
+        Action    = "kms:*"
+        Resource  = "*"
+      }
+    ]
+  })
 }
+
 
 resource "aws_lambda_code_signing_config" "signing_config" {
   allowed_publishers {
@@ -144,12 +178,6 @@ resource "aws_security_group" "lambda_sg" {
   }
 }
 
-  vpc_config {
-    subnet_ids         = data.aws_subnet_ids.default.ids
-    security_group_ids = [aws_security_group.lambda_sg.id]
-  }
-
-
 resource "aws_lambda_function" "lambdas" {
   for_each         = local.lambdas
   function_name    = each.key
@@ -173,6 +201,15 @@ resource "aws_lambda_function" "lambdas" {
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
 
+  dead_letter_config {
+    target_arn = aws_sqs_queue.lambda_dlq.arn
+  }
+
+  tracing_config {
+  mode = "Active"
+  }
+
+
 }
 
 # ========== API Gateway ==========
@@ -194,6 +231,7 @@ resource "aws_apigatewayv2_route" "send_to_sqs_route" {
   api_id    = aws_apigatewayv2_api.http_api.id
   route_key = "POST /send_to_sqs"
   target    = "integrations/${aws_apigatewayv2_integration.send_to_sqs_integration.id}"
+  authorization_type = "AWS_IAM"
 }
 
 resource "aws_lambda_permission" "allow_apigw_send_to_sqs" {
@@ -218,6 +256,8 @@ resource "aws_apigatewayv2_route" "lambda_routes" {
   api_id    = aws_apigatewayv2_api.http_api.id
   route_key = "POST /${each.key}"
   target    = "integrations/${each.value.id}"
+  authorization_type = "AWS_IAM"
+
 }
 
 resource "aws_apigatewayv2_stage" "default_stage" {
@@ -240,12 +280,18 @@ resource "aws_lambda_permission" "allow_apigw" {
 resource "aws_cloudwatch_log_group" "lambda_logs" {
   for_each          = aws_lambda_function.lambdas
   name              = "/aws/lambda/${each.value.function_name}"
-  retention_in_days = 7
+  retention_in_days = 365
+  kms_key_id       = aws_kms_key.lambda_env_key.arn
 }
 
 resource "aws_cloudwatch_log_group" "lambda_send_to_sqs_logs" {
   name              = "/aws/lambda/${aws_lambda_function.send_to_sqs.function_name}"
-  retention_in_days = 7
+  retention_in_days = 365
+  kms_key_id       = aws_kms_key.lambda_env_key.arn
+  
+}
+resource "aws_sqs_queue" "lambda_dlq" {
+  name = "lambda-dlq"
 }
  
 #MENSAJERIA
