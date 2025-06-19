@@ -319,6 +319,7 @@ resource "aws_sqs_queue" "iot_alert_queue" {
   name                      = "iot_alert_queue"
   visibility_timeout_seconds = 30
   message_retention_seconds = 86400  # 1 día
+  sqs_managed_sse_enabled   = true
 }
 
 #enviar a sqs
