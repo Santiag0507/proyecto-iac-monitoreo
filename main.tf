@@ -144,12 +144,6 @@ resource "aws_security_group" "lambda_sg" {
   }
 }
 
-  vpc_config {
-    subnet_ids         = data.aws_subnet_ids.default.ids
-    security_group_ids = [aws_security_group.lambda_sg.id]
-  }
-
-
 resource "aws_lambda_function" "lambdas" {
   for_each         = local.lambdas
   function_name    = each.key
@@ -240,7 +234,7 @@ resource "aws_lambda_permission" "allow_apigw" {
 resource "aws_cloudwatch_log_group" "lambda_logs" {
   for_each          = aws_lambda_function.lambdas
   name              = "/aws/lambda/${each.value.function_name}"
-  retention_in_days = 7
+  retention_in_days = 365
 }
 
 resource "aws_cloudwatch_log_group" "lambda_send_to_sqs_logs" {
