@@ -310,6 +310,7 @@ resource "aws_cloudwatch_log_group" "lambda_send_to_sqs_logs" {
 }
 resource "aws_sqs_queue" "lambda_dlq" {
   name = "lambda-dlq"
+  sqs_managed_sse_enabled  = true
 }
  
 #MENSAJERIA
