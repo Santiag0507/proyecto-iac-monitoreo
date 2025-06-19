@@ -23,8 +23,6 @@ data "aws_subnet_ids" "default" {
   vpc_id = data.aws_vpc.default.id
 }
 
-
-
 resource "aws_iam_role" "lambda_role" {
   name               = "lambda-execution-role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
@@ -178,6 +176,11 @@ resource "aws_security_group" "lambda_sg" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "apigw_logs" {
+  name              = "/aws/apigateway/access-logs"
+  retention_in_days = 30
+}
+
 resource "aws_lambda_function" "lambdas" {
   for_each         = local.lambdas
   function_name    = each.key
@@ -264,6 +267,21 @@ resource "aws_apigatewayv2_stage" "default_stage" {
   api_id      = aws_apigatewayv2_api.http_api.id
   name        = "$default"
   auto_deploy = true
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.apigw_logs.arn
+    format = jsonencode({
+      requestId               = "$context.requestId"
+      ip                      = "$context.identity.sourceIp"
+      requestTime             = "$context.requestTime"
+      httpMethod              = "$context.httpMethod"
+      routeKey                = "$context.routeKey"
+      status                  = "$context.status"
+      protocol                = "$context.protocol"
+      responseLength          = "$context.responseLength"
+      integrationErrorMessage = "$context.integrationErrorMessage"
+    })
+  }
 }
 
 # ========== Permisos Lambda para API Gateway ==========
@@ -367,4 +385,3 @@ resource "aws_lambda_event_source_mapping" "sqs_trigger" {
   batch_size       = 1
   enabled          = true
 }
-
