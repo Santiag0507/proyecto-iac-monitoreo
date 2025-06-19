@@ -343,6 +343,10 @@ resource "aws_lambda_function" "send_to_sqs" {
 
   reserved_concurrent_executions = 10
 
+  dead_letter_config {
+    target_arn = aws_sqs_queue.lambda_dlq.arn
+  }
+
   vpc_config {
     subnet_ids         = data.aws_subnet_ids.default.ids
     security_group_ids = [aws_security_group.lambda_sg.id]
