@@ -373,12 +373,12 @@ resource "aws_sns_topic_subscription" "email_subscription" {
 }
 
 resource "aws_lambda_function" "sqs_to_sns" {
-  function_name = "sqs_to_sns"
-  handler       = "index.handler"
-  runtime       = "nodejs18.x"
-  filename      = "${path.module}/lambda_sqs_to_sns.zip"
+  function_name    = "sqs_to_sns"
+  handler          = "index.handler"
+  runtime          = "nodejs18.x"
+  filename         = "${path.module}/lambda_sqs_to_sns.zip"
   source_code_hash = filebase64sha256("${path.module}/lambda_sqs_to_sns.zip")
-  role          = aws_iam_role.lambda_role.arn
+  role             = aws_iam_role.lambda_role.arn
 
   environment {
     variables = {
@@ -387,6 +387,11 @@ resource "aws_lambda_function" "sqs_to_sns" {
   }
   
   kms_key_arn = aws_kms_key.lambda_env_key.arn
+
+  # ---- AGREGAR ESTO: ----
+  tracing_config {
+    mode = "Active"
+  }
 
   vpc_config {
     subnet_ids         = data.aws_subnet_ids.default.ids
