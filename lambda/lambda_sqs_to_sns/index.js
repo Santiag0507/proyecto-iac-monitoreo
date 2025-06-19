@@ -17,4 +17,7 @@ exports.handler = async (event) => {
       console.error("Error al reenviar mensaje:", error);
     }
   }
+
+  code_signing_config_arn = aws_lambda_code_signing_config.default.arn
+
 };
