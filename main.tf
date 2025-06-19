@@ -406,3 +406,16 @@ resource "aws_lambda_event_source_mapping" "sqs_trigger" {
   batch_size       = 1
   enabled          = true
 }
+
+resource "aws_lambda_code_signing_config" "default" {
+  allowed_publishers {
+    signing_profile_version_arns = [
+      "arn:aws:signer:us-east-1:000000000000:signing-profile/example"
+    ]
+  }
+
+  policies {
+    untrusted_artifact_on_deployment = "Enforce"
+  }
+}
+
