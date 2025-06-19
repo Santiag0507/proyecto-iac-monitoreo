@@ -36,6 +36,7 @@
 			<property name="secrets_history_timeout" value="12h"/>
 			<property name="custom_tool_name" value="Checkov"/>
 		</properties>
+		<testcase name="[NONE][CKV_AWS_41] Ensure no hard coded AWS access key and secret key exists in provider" classname="/main.tf.aws.default" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_49] Ensure no IAM policies documents allow &quot;*&quot; as a statement's actions" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_111] Ensure IAM policies does not allow write access without constraints" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_356] Ensure no IAM policies documents allow &quot;*&quot; as a statement's resource for restrictable actions" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
@@ -144,19 +145,18 @@
 		<testcase name="[NONE][CKV_AWS_45] Ensure no hard-coded secrets exist in lambda environment" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_117] Ensure that AWS Lambda function is configured inside a VPC" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_50] X-Ray tracing is enabled for Lambda" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_41] Ensure no hard coded AWS access key and secret key exists in provider" classname="/main.tf.aws.default" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_5] Ensure that Security Groups are attached to another resource" classname="/main.tf.aws_security_group.lambda_sg" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_77] Ensure AWS API Gateway Rest API attached WAFv2 WebACL is configured with AMR for Log4j Vulnerability" classname="/main.tf.aws_apigatewayv2_api.http_api" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_56] Ensure AWS Managed IAMFullAccess IAM policy is not used." classname="/main.tf.aws_iam_role.lambda_role" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_56] Ensure AWS Managed IAMFullAccess IAM policy is not used." classname="/main.tf.aws_iam_role_policy_attachment.lambda_logs" file="/main.tf"/>
-		<testcase name="[NONE][CKV2_AWS_73] Ensure AWS SQS uses CMK not AWS default keys for encryption" classname="/main.tf.aws_sqs_queue.lambda_dlq" file="/main.tf"/>
-		<testcase name="[NONE][CKV2_AWS_73] Ensure AWS SQS uses CMK not AWS default keys for encryption" classname="/main.tf.aws_sqs_queue.iot_alert_queue" file="/main.tf"/>
-		<testcase name="[NONE][CKV2_AWS_16] Ensure that Auto Scaling is enabled on your DynamoDB tables" classname="/main.tf.aws_dynamodb_table.iot_data" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_40] Ensure AWS IAM policy does not allow full IAM privileges" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_40] Ensure AWS IAM policy does not allow full IAM privileges" classname="/main.tf.aws_iam_role_policy.lambda_dynamodb" file="/main.tf"/>
+		<testcase name="[NONE][CKV2_AWS_73] Ensure AWS SQS uses CMK not AWS default keys for encryption" classname="/main.tf.aws_sqs_queue.lambda_dlq" file="/main.tf"/>
+		<testcase name="[NONE][CKV2_AWS_73] Ensure AWS SQS uses CMK not AWS default keys for encryption" classname="/main.tf.aws_sqs_queue.iot_alert_queue" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_51] Ensure AWS API Gateway endpoints uses client certificate authentication" classname="/main.tf.aws_apigatewayv2_stage.default_stage" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_64] Ensure KMS key Policy is defined" classname="/main.tf.aws_kms_key.dynamodb_key" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_64] Ensure KMS key Policy is defined" classname="/main.tf.aws_kms_key.lambda_env_key" file="/main.tf"/>
+		<testcase name="[NONE][CKV2_AWS_16] Ensure that Auto Scaling is enabled on your DynamoDB tables" classname="/main.tf.aws_dynamodb_table.iot_data" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf"/>

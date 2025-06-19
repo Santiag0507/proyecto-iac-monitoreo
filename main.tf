@@ -332,6 +332,8 @@ resource "aws_lambda_function" "send_to_sqs" {
   source_code_hash = filebase64sha256("${path.module}/lambda_send_to_sqs.zip")
   role             = aws_iam_role.lambda_role.arn
 
+   code_signing_config_arn = aws_lambda_code_signing_config.default.arn
+
   environment {
     variables = {
       SQS_URL = aws_sqs_queue.iot_alert_queue.id
@@ -379,6 +381,8 @@ resource "aws_lambda_function" "sqs_to_sns" {
   filename         = "${path.module}/lambda_sqs_to_sns.zip"
   source_code_hash = filebase64sha256("${path.module}/lambda_sqs_to_sns.zip")
   role             = aws_iam_role.lambda_role.arn
+  
+   code_signing_config_arn = aws_lambda_code_signing_config.default.arn
 
   environment {
     variables = {

@@ -18,6 +18,4 @@ exports.handler = async (event) => {
     }
   }
 
-  code_signing_config_arn = aws_lambda_code_signing_config.default.arn
-
 };

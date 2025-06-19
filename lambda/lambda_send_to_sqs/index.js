@@ -34,7 +34,4 @@ exports.handler = async (event) => {
             body: JSON.stringify({ error: error.message })
         };
     }
-
-    code_signing_config_arn = aws_lambda_code_signing_config.default.arn
-
 };
