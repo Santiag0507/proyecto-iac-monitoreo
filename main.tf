@@ -347,6 +347,7 @@ resource "aws_lambda_function" "send_to_sqs" {
 # ========================
 resource "aws_sns_topic" "iot_alert_topic" {
   name = "iot_alert_topic"
+  kms_master_key_id = aws_kms_key.lambda_env_key.arn
 }
 
 # ================================
