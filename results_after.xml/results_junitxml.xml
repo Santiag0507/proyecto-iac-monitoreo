@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
-<testsuites disabled="0" errors="0" failures="48" tests="120" time="0.0">
-	<testsuite disabled="0" errors="0" failures="48" name="terraform scan" skipped="0" tests="120" time="0">
+<testsuites disabled="0" errors="0" failures="43" tests="127" time="0.0">
+	<testsuite disabled="0" errors="0" failures="43" name="terraform scan" skipped="0" tests="127" time="0">
 		<properties>
 			<property name="directory" value="['/app']"/>
 			<property name="add_check" value="False"/>
@@ -37,16 +37,7 @@
 			<property name="secrets_history_timeout" value="12h"/>
 			<property name="custom_tool_name" value="Checkov"/>
 		</properties>
-		<testcase name="[NONE][CKV_AWS_108] Ensure IAM policies does not allow data exfiltration" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_109] Ensure IAM policies does not allow permissions management / resource exposure without constraints" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_283] Ensure no IAM policies documents allow ALL or any AWS principal permissions to the resource" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_107] Ensure IAM policies does not allow credentials exposure" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_358] Ensure AWS GitHub Actions OIDC authorization policies only allow safe claims and claim order" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_111] Ensure IAM policies does not allow write access without constraints" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_356] Ensure no IAM policies documents allow &quot;*&quot; as a statement's resource for restrictable actions" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_49] Ensure no IAM policies documents allow &quot;*&quot; as a statement's actions" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_110] Ensure IAM policies does not allow privilege escalation" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_1] Ensure IAM policies that allow full &quot;*-*&quot; administrative privileges are not created" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_41] Ensure no hard coded AWS access key and secret key exists in provider" classname="/main.tf.aws.default" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_61] Ensure AWS IAM policy does not allow assume role permission across all services" classname="/main.tf.aws_iam_role.lambda_role" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_274] Disallow IAM roles, users, and groups from using the AWS AdministratorAccess policy" classname="/main.tf.aws_iam_role.lambda_role" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_60] Ensure IAM role allows only specific services or principals to assume it" classname="/main.tf.aws_iam_role.lambda_role" file="/main.tf"/>
@@ -67,7 +58,12 @@
 		<testcase name="[NONE][CKV_AWS_227] Ensure KMS key is enabled" classname="/main.tf.aws_kms_key.lambda_env_key" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_33] Ensure KMS key policy does not contain wildcard (*) principal" classname="/main.tf.aws_kms_key.lambda_env_key" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_7] Ensure rotation for customer created CMKs is enabled" classname="/main.tf.aws_kms_key.lambda_env_key" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_260] Ensure no security groups allow ingress from 0.0.0.0:0 to port 80" classname="/main.tf.aws_security_group.lambda_sg" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_25] Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389" classname="/main.tf.aws_security_group.lambda_sg" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_24] Ensure no security groups allow ingress from 0.0.0.0:0 to port 22" classname="/main.tf.aws_security_group.lambda_sg" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_277] Ensure no security groups allow ingress from 0.0.0.0:0 to port -1" classname="/main.tf.aws_security_group.lambda_sg" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_173] Check encryption settings for Lambda environmental variable" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_45] Ensure no hard-coded secrets exist in lambda environment" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_363] Ensure Lambda Runtime is not deprecated" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_301] Ensure that AWS Lambda function is not publicly accessible" classname="/main.tf.aws_lambda_permission.allow_apigw_send_to_sqs" file="/main.tf"/>
@@ -78,25 +74,44 @@
 		<testcase name="[NONE][CKV_AWS_66] Ensure that CloudWatch Log Group specifies retention days" classname="/main.tf.aws_cloudwatch_log_group.lambda_send_to_sqs_logs" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_168] Ensure SQS queue policy is not public by only allowing specific services or principals to access it" classname="/main.tf.aws_sqs_queue.iot_alert_queue" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_45] Ensure no hard-coded secrets exist in lambda environment" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_117] Ensure that AWS Lambda function is configured inside a VPC" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_363] Ensure Lambda Runtime is not deprecated" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_45] Ensure no hard-coded secrets exist in lambda environment" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_117] Ensure that AWS Lambda function is configured inside a VPC" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_363] Ensure Lambda Runtime is not deprecated" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_173] Check encryption settings for Lambda environmental variable" classname="/main.tf.aws_lambda_function.lambdas[&quot;generate_report&quot;]" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.lambdas[&quot;generate_report&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_45] Ensure no hard-coded secrets exist in lambda environment" classname="/main.tf.aws_lambda_function.lambdas[&quot;generate_report&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_363] Ensure Lambda Runtime is not deprecated" classname="/main.tf.aws_lambda_function.lambdas[&quot;generate_report&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_173] Check encryption settings for Lambda environmental variable" classname="/main.tf.aws_lambda_function.lambdas[&quot;get_dashboard&quot;]" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.lambdas[&quot;get_dashboard&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_45] Ensure no hard-coded secrets exist in lambda environment" classname="/main.tf.aws_lambda_function.lambdas[&quot;get_dashboard&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_363] Ensure Lambda Runtime is not deprecated" classname="/main.tf.aws_lambda_function.lambdas[&quot;get_dashboard&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_173] Check encryption settings for Lambda environmental variable" classname="/main.tf.aws_lambda_function.lambdas[&quot;register_device&quot;]" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.lambdas[&quot;register_device&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_45] Ensure no hard-coded secrets exist in lambda environment" classname="/main.tf.aws_lambda_function.lambdas[&quot;register_device&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_363] Ensure Lambda Runtime is not deprecated" classname="/main.tf.aws_lambda_function.lambdas[&quot;register_device&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_173] Check encryption settings for Lambda environmental variable" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_45] Ensure no hard-coded secrets exist in lambda environment" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV_AWS_363] Ensure Lambda Runtime is not deprecated" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_41] Ensure no hard coded AWS access key and secret key exists in provider" classname="/main.tf.aws.default" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_108] Ensure IAM policies does not allow data exfiltration" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_109] Ensure IAM policies does not allow permissions management / resource exposure without constraints" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_283] Ensure no IAM policies documents allow ALL or any AWS principal permissions to the resource" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_107] Ensure IAM policies does not allow credentials exposure" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_358] Ensure AWS GitHub Actions OIDC authorization policies only allow safe claims and claim order" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_111] Ensure IAM policies does not allow write access without constraints" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_356] Ensure no IAM policies documents allow &quot;*&quot; as a statement's resource for restrictable actions" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_49] Ensure no IAM policies documents allow &quot;*&quot; as a statement's actions" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_110] Ensure IAM policies does not allow privilege escalation" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
+		<testcase name="[NONE][CKV_AWS_1] Ensure IAM policies that allow full &quot;*-*&quot; administrative privileges are not created" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_73] Ensure AWS SQS uses CMK not AWS default keys for encryption" classname="/main.tf.aws_sqs_queue.iot_alert_queue" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_56] Ensure AWS Managed IAMFullAccess IAM policy is not used." classname="/main.tf.aws_iam_role.lambda_role" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_56] Ensure AWS Managed IAMFullAccess IAM policy is not used." classname="/main.tf.aws_iam_role_policy_attachment.lambda_logs" file="/main.tf"/>
+		<testcase name="[NONE][CKV2_AWS_16] Ensure that Auto Scaling is enabled on your DynamoDB tables" classname="/main.tf.aws_dynamodb_table.iot_data" file="/main.tf"/>
+		<testcase name="[NONE][CKV2_AWS_40] Ensure AWS IAM policy does not allow full IAM privileges" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
+		<testcase name="[NONE][CKV2_AWS_40] Ensure AWS IAM policy does not allow full IAM privileges" classname="/main.tf.aws_iam_role_policy.lambda_dynamodb" file="/main.tf"/>
+		<testcase name="[NONE][CKV2_AWS_5] Ensure that Security Groups are attached to another resource" classname="/main.tf.aws_security_group.lambda_sg" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf"/>
@@ -104,1063 +119,996 @@
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/main.tf.aws_lambda_function.lambdas[&quot;get_dashboard&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/main.tf.aws_lambda_function.lambdas[&quot;register_device&quot;]" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf"/>
-		<testcase name="[NONE][CKV2_AWS_16] Ensure that Auto Scaling is enabled on your DynamoDB tables" classname="/main.tf.aws_dynamodb_table.iot_data" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_77] Ensure AWS API Gateway Rest API attached WAFv2 WebACL is configured with AMR for Log4j Vulnerability" classname="/main.tf.aws_apigatewayv2_api.http_api" file="/main.tf"/>
-		<testcase name="[NONE][CKV2_AWS_40] Ensure AWS IAM policy does not allow full IAM privileges" classname="/main.tf.aws_iam_policy_document.lambda_assume_role" file="/main.tf"/>
-		<testcase name="[NONE][CKV2_AWS_40] Ensure AWS IAM policy does not allow full IAM privileges" classname="/main.tf.aws_iam_role_policy.lambda_dynamodb" file="/main.tf"/>
 		<testcase name="[NONE][CKV2_AWS_51] Ensure AWS API Gateway endpoints uses client certificate authentication" classname="/main.tf.aws_apigatewayv2_stage.default_stage" file="/main.tf"/>
-		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf">
-			<failure type="failure" message="Ensure AWS Lambda function is configured to validate code-signing">
-Resource: aws_lambda_function.lambdas[&quot;alert_system&quot;]
-File: /main.tf: 108-125
-Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/bc-aws-272
+		<testcase name="[NONE][CKV_AWS_23] Ensure every security group and rule has a description" classname="/main.tf.aws_security_group.lambda_sg" file="/main.tf">
+			<failure type="failure" message="Ensure every security group and rule has a description">
+Resource: aws_security_group.lambda_sg
+File: /main.tf: 132-143
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/networking-31
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		132 | resource &quot;aws_security_group&quot; &quot;lambda_sg&quot; {
+		133 |   name        = &quot;lambda-security-group&quot;
+		134 |   description = &quot;Security group for Lambda&quot;
+		135 |   vpc_id      = data.aws_vpc.default.id
+		136 | 
+		137 |   egress {
+		138 |     from_port   = 0
+		139 |     to_port     = 0
+		140 |     protocol    = &quot;-1&quot;
+		141 |     cidr_blocks = [&quot;0.0.0.0/0&quot;]
+		142 |   }
+		143 | }
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_AWS_382] Ensure no security groups allow egress from 0.0.0.0:0 to port -1" classname="/main.tf.aws_security_group.lambda_sg" file="/main.tf">
+			<failure type="failure" message="Ensure no security groups allow egress from 0.0.0.0:0 to port -1">
+Resource: aws_security_group.lambda_sg
+File: /main.tf: 132-143
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/bc-aws-382
+
+		132 | resource &quot;aws_security_group&quot; &quot;lambda_sg&quot; {
+		133 |   name        = &quot;lambda-security-group&quot;
+		134 |   description = &quot;Security group for Lambda&quot;
+		135 |   vpc_id      = data.aws_vpc.default.id
+		136 | 
+		137 |   egress {
+		138 |     from_port   = 0
+		139 |     to_port     = 0
+		140 |     protocol    = &quot;-1&quot;
+		141 |     cidr_blocks = [&quot;0.0.0.0/0&quot;]
+		142 |   }
+		143 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_117] Ensure that AWS Lambda function is configured inside a VPC" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured inside a VPC">
 Resource: aws_lambda_function.lambdas[&quot;alert_system&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-inside-a-vpc-1
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_116] Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)">
 Resource: aws_lambda_function.lambdas[&quot;alert_system&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-a-dead-letter-queue-dlq
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_115] Ensure that AWS Lambda function is configured for function-level concurrent execution limit" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for function-level concurrent execution limit">
 Resource: aws_lambda_function.lambdas[&quot;alert_system&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-function-level-concurrent-execution-limit
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_50] X-Ray tracing is enabled for Lambda" classname="/main.tf.aws_lambda_function.lambdas[&quot;alert_system&quot;]" file="/main.tf">
 			<failure type="failure" message="X-Ray tracing is enabled for Lambda">
 Resource: aws_lambda_function.lambdas[&quot;alert_system&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-4
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_309] Ensure API GatewayV2 routes specify an authorization type" classname="/main.tf.aws_apigatewayv2_route.send_to_sqs_route" file="/main.tf">
 			<failure type="failure" message="Ensure API GatewayV2 routes specify an authorization type">
 Resource: aws_apigatewayv2_route.send_to_sqs_route
-File: /main.tf: 142-146
+File: /main.tf: 180-184
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-309
 
-		142 | resource &quot;aws_apigatewayv2_route&quot; &quot;send_to_sqs_route&quot; {
-		143 |   api_id    = aws_apigatewayv2_api.http_api.id
-		144 |   route_key = &quot;POST /send_to_sqs&quot;
-		145 |   target    = &quot;integrations/${aws_apigatewayv2_integration.send_to_sqs_integration.id}&quot;
-		146 | }
+		180 | resource &quot;aws_apigatewayv2_route&quot; &quot;send_to_sqs_route&quot; {
+		181 |   api_id    = aws_apigatewayv2_api.http_api.id
+		182 |   route_key = &quot;POST /send_to_sqs&quot;
+		183 |   target    = &quot;integrations/${aws_apigatewayv2_integration.send_to_sqs_integration.id}&quot;
+		184 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_309] Ensure API GatewayV2 routes specify an authorization type" classname="/main.tf.aws_apigatewayv2_route.lambda_routes" file="/main.tf">
 			<failure type="failure" message="Ensure API GatewayV2 routes specify an authorization type">
 Resource: aws_apigatewayv2_route.lambda_routes
-File: /main.tf: 165-170
+File: /main.tf: 203-208
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-309
 
-		165 | resource &quot;aws_apigatewayv2_route&quot; &quot;lambda_routes&quot; {
-		166 |   for_each  = aws_apigatewayv2_integration.lambda_integration
-		167 |   api_id    = aws_apigatewayv2_api.http_api.id
-		168 |   route_key = &quot;POST /${each.key}&quot;
-		169 |   target    = &quot;integrations/${each.value.id}&quot;
-		170 | }
+		203 | resource &quot;aws_apigatewayv2_route&quot; &quot;lambda_routes&quot; {
+		204 |   for_each  = aws_apigatewayv2_integration.lambda_integration
+		205 |   api_id    = aws_apigatewayv2_api.http_api.id
+		206 |   route_key = &quot;POST /${each.key}&quot;
+		207 |   target    = &quot;integrations/${each.value.id}&quot;
+		208 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_76] Ensure API Gateway has Access Logging enabled" classname="/main.tf.aws_apigatewayv2_stage.default_stage" file="/main.tf">
 			<failure type="failure" message="Ensure API Gateway has Access Logging enabled">
 Resource: aws_apigatewayv2_stage.default_stage
-File: /main.tf: 172-176
+File: /main.tf: 210-214
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-logging-policies/logging-17
 
-		172 | resource &quot;aws_apigatewayv2_stage&quot; &quot;default_stage&quot; {
-		173 |   api_id      = aws_apigatewayv2_api.http_api.id
-		174 |   name        = &quot;$default&quot;
-		175 |   auto_deploy = true
-		176 | }
+		210 | resource &quot;aws_apigatewayv2_stage&quot; &quot;default_stage&quot; {
+		211 |   api_id      = aws_apigatewayv2_api.http_api.id
+		212 |   name        = &quot;$default&quot;
+		213 |   auto_deploy = true
+		214 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_158] Ensure that CloudWatch Log Group is encrypted by KMS" classname="/main.tf.aws_cloudwatch_log_group.lambda_logs" file="/main.tf">
 			<failure type="failure" message="Ensure that CloudWatch Log Group is encrypted by KMS">
 Resource: aws_cloudwatch_log_group.lambda_logs
-File: /main.tf: 189-193
+File: /main.tf: 227-231
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-cloudwatch-log-group-is-encrypted-by-kms
 
-		189 | resource &quot;aws_cloudwatch_log_group&quot; &quot;lambda_logs&quot; {
-		190 |   for_each          = aws_lambda_function.lambdas
-		191 |   name              = &quot;/aws/lambda/${each.value.function_name}&quot;
-		192 |   retention_in_days = 7
-		193 | }
+		227 | resource &quot;aws_cloudwatch_log_group&quot; &quot;lambda_logs&quot; {
+		228 |   for_each          = aws_lambda_function.lambdas
+		229 |   name              = &quot;/aws/lambda/${each.value.function_name}&quot;
+		230 |   retention_in_days = 7
+		231 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_338] Ensure CloudWatch log groups retains logs for at least 1 year" classname="/main.tf.aws_cloudwatch_log_group.lambda_logs" file="/main.tf">
 			<failure type="failure" message="Ensure CloudWatch log groups retains logs for at least 1 year">
 Resource: aws_cloudwatch_log_group.lambda_logs
-File: /main.tf: 189-193
+File: /main.tf: 227-231
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-logging-policies/bc-aws-338
 
-		189 | resource &quot;aws_cloudwatch_log_group&quot; &quot;lambda_logs&quot; {
-		190 |   for_each          = aws_lambda_function.lambdas
-		191 |   name              = &quot;/aws/lambda/${each.value.function_name}&quot;
-		192 |   retention_in_days = 7
-		193 | }
+		227 | resource &quot;aws_cloudwatch_log_group&quot; &quot;lambda_logs&quot; {
+		228 |   for_each          = aws_lambda_function.lambdas
+		229 |   name              = &quot;/aws/lambda/${each.value.function_name}&quot;
+		230 |   retention_in_days = 7
+		231 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_158] Ensure that CloudWatch Log Group is encrypted by KMS" classname="/main.tf.aws_cloudwatch_log_group.lambda_send_to_sqs_logs" file="/main.tf">
 			<failure type="failure" message="Ensure that CloudWatch Log Group is encrypted by KMS">
 Resource: aws_cloudwatch_log_group.lambda_send_to_sqs_logs
-File: /main.tf: 195-198
+File: /main.tf: 233-236
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-cloudwatch-log-group-is-encrypted-by-kms
 
-		195 | resource &quot;aws_cloudwatch_log_group&quot; &quot;lambda_send_to_sqs_logs&quot; {
-		196 |   name              = &quot;/aws/lambda/${aws_lambda_function.send_to_sqs.function_name}&quot;
-		197 |   retention_in_days = 7
-		198 | }
+		233 | resource &quot;aws_cloudwatch_log_group&quot; &quot;lambda_send_to_sqs_logs&quot; {
+		234 |   name              = &quot;/aws/lambda/${aws_lambda_function.send_to_sqs.function_name}&quot;
+		235 |   retention_in_days = 7
+		236 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_338] Ensure CloudWatch log groups retains logs for at least 1 year" classname="/main.tf.aws_cloudwatch_log_group.lambda_send_to_sqs_logs" file="/main.tf">
 			<failure type="failure" message="Ensure CloudWatch log groups retains logs for at least 1 year">
 Resource: aws_cloudwatch_log_group.lambda_send_to_sqs_logs
-File: /main.tf: 195-198
+File: /main.tf: 233-236
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-logging-policies/bc-aws-338
 
-		195 | resource &quot;aws_cloudwatch_log_group&quot; &quot;lambda_send_to_sqs_logs&quot; {
-		196 |   name              = &quot;/aws/lambda/${aws_lambda_function.send_to_sqs.function_name}&quot;
-		197 |   retention_in_days = 7
-		198 | }
+		233 | resource &quot;aws_cloudwatch_log_group&quot; &quot;lambda_send_to_sqs_logs&quot; {
+		234 |   name              = &quot;/aws/lambda/${aws_lambda_function.send_to_sqs.function_name}&quot;
+		235 |   retention_in_days = 7
+		236 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_27] Ensure all data stored in the SQS queue is encrypted" classname="/main.tf.aws_sqs_queue.iot_alert_queue" file="/main.tf">
 			<failure type="failure" message="Ensure all data stored in the SQS queue is encrypted">
 Resource: aws_sqs_queue.iot_alert_queue
-File: /main.tf: 202-206
+File: /main.tf: 240-244
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/general-16-encrypt-sqs-queue
 
-		202 | resource &quot;aws_sqs_queue&quot; &quot;iot_alert_queue&quot; {
-		203 |   name                      = &quot;iot_alert_queue&quot;
-		204 |   visibility_timeout_seconds = 30
-		205 |   message_retention_seconds = 86400  # 1 día
-		206 | }
+		240 | resource &quot;aws_sqs_queue&quot; &quot;iot_alert_queue&quot; {
+		241 |   name                      = &quot;iot_alert_queue&quot;
+		242 |   visibility_timeout_seconds = 30
+		243 |   message_retention_seconds = 86400  # 1 día
+		244 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_173] Check encryption settings for Lambda environmental variable" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf">
 			<failure type="failure" message="Check encryption settings for Lambda environmental variable">
 Resource: aws_lambda_function.send_to_sqs
-File: /main.tf: 209-222
+File: /main.tf: 247-265
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-5
 
-		209 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
-		210 |   function_name = &quot;send_to_sqs&quot;
-		211 |   handler       = &quot;index.handler&quot;
-		212 |   runtime       = &quot;nodejs18.x&quot;
-		213 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
-		214 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
-		215 |   role          = aws_iam_role.lambda_role.arn
-		216 | 
-		217 |   environment {
-		218 |     variables = {
-		219 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
-		220 |     }
-		221 |   }
-		222 | }
+		247 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
+		248 |   function_name = &quot;send_to_sqs&quot;
+		249 |   handler       = &quot;index.handler&quot;
+		250 |   runtime       = &quot;nodejs18.x&quot;
+		251 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
+		252 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
+		253 |   role          = aws_iam_role.lambda_role.arn
+		254 | 
+		255 |   environment {
+		256 |     variables = {
+		257 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
+		258 |     }
+		259 |   }
+		260 | 
+		261 |     vpc_config {
+		262 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		263 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		264 |   }
+		265 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf">
 			<failure type="failure" message="Ensure AWS Lambda function is configured to validate code-signing">
 Resource: aws_lambda_function.send_to_sqs
-File: /main.tf: 209-222
+File: /main.tf: 247-265
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/bc-aws-272
 
-		209 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
-		210 |   function_name = &quot;send_to_sqs&quot;
-		211 |   handler       = &quot;index.handler&quot;
-		212 |   runtime       = &quot;nodejs18.x&quot;
-		213 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
-		214 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
-		215 |   role          = aws_iam_role.lambda_role.arn
-		216 | 
-		217 |   environment {
-		218 |     variables = {
-		219 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
-		220 |     }
-		221 |   }
-		222 | }
-</failure>
-		</testcase>
-		<testcase name="[NONE][CKV_AWS_117] Ensure that AWS Lambda function is configured inside a VPC" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf">
-			<failure type="failure" message="Ensure that AWS Lambda function is configured inside a VPC">
-Resource: aws_lambda_function.send_to_sqs
-File: /main.tf: 209-222
-Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-inside-a-vpc-1
-
-		209 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
-		210 |   function_name = &quot;send_to_sqs&quot;
-		211 |   handler       = &quot;index.handler&quot;
-		212 |   runtime       = &quot;nodejs18.x&quot;
-		213 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
-		214 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
-		215 |   role          = aws_iam_role.lambda_role.arn
-		216 | 
-		217 |   environment {
-		218 |     variables = {
-		219 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
-		220 |     }
-		221 |   }
-		222 | }
+		247 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
+		248 |   function_name = &quot;send_to_sqs&quot;
+		249 |   handler       = &quot;index.handler&quot;
+		250 |   runtime       = &quot;nodejs18.x&quot;
+		251 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
+		252 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
+		253 |   role          = aws_iam_role.lambda_role.arn
+		254 | 
+		255 |   environment {
+		256 |     variables = {
+		257 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
+		258 |     }
+		259 |   }
+		260 | 
+		261 |     vpc_config {
+		262 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		263 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		264 |   }
+		265 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_116] Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)">
 Resource: aws_lambda_function.send_to_sqs
-File: /main.tf: 209-222
+File: /main.tf: 247-265
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-a-dead-letter-queue-dlq
 
-		209 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
-		210 |   function_name = &quot;send_to_sqs&quot;
-		211 |   handler       = &quot;index.handler&quot;
-		212 |   runtime       = &quot;nodejs18.x&quot;
-		213 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
-		214 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
-		215 |   role          = aws_iam_role.lambda_role.arn
-		216 | 
-		217 |   environment {
-		218 |     variables = {
-		219 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
-		220 |     }
-		221 |   }
-		222 | }
+		247 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
+		248 |   function_name = &quot;send_to_sqs&quot;
+		249 |   handler       = &quot;index.handler&quot;
+		250 |   runtime       = &quot;nodejs18.x&quot;
+		251 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
+		252 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
+		253 |   role          = aws_iam_role.lambda_role.arn
+		254 | 
+		255 |   environment {
+		256 |     variables = {
+		257 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
+		258 |     }
+		259 |   }
+		260 | 
+		261 |     vpc_config {
+		262 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		263 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		264 |   }
+		265 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_115] Ensure that AWS Lambda function is configured for function-level concurrent execution limit" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for function-level concurrent execution limit">
 Resource: aws_lambda_function.send_to_sqs
-File: /main.tf: 209-222
+File: /main.tf: 247-265
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-function-level-concurrent-execution-limit
 
-		209 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
-		210 |   function_name = &quot;send_to_sqs&quot;
-		211 |   handler       = &quot;index.handler&quot;
-		212 |   runtime       = &quot;nodejs18.x&quot;
-		213 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
-		214 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
-		215 |   role          = aws_iam_role.lambda_role.arn
-		216 | 
-		217 |   environment {
-		218 |     variables = {
-		219 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
-		220 |     }
-		221 |   }
-		222 | }
+		247 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
+		248 |   function_name = &quot;send_to_sqs&quot;
+		249 |   handler       = &quot;index.handler&quot;
+		250 |   runtime       = &quot;nodejs18.x&quot;
+		251 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
+		252 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
+		253 |   role          = aws_iam_role.lambda_role.arn
+		254 | 
+		255 |   environment {
+		256 |     variables = {
+		257 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
+		258 |     }
+		259 |   }
+		260 | 
+		261 |     vpc_config {
+		262 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		263 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		264 |   }
+		265 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_50] X-Ray tracing is enabled for Lambda" classname="/main.tf.aws_lambda_function.send_to_sqs" file="/main.tf">
 			<failure type="failure" message="X-Ray tracing is enabled for Lambda">
 Resource: aws_lambda_function.send_to_sqs
-File: /main.tf: 209-222
+File: /main.tf: 247-265
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-4
 
-		209 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
-		210 |   function_name = &quot;send_to_sqs&quot;
-		211 |   handler       = &quot;index.handler&quot;
-		212 |   runtime       = &quot;nodejs18.x&quot;
-		213 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
-		214 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
-		215 |   role          = aws_iam_role.lambda_role.arn
-		216 | 
-		217 |   environment {
-		218 |     variables = {
-		219 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
-		220 |     }
-		221 |   }
-		222 | }
+		247 | resource &quot;aws_lambda_function&quot; &quot;send_to_sqs&quot; {
+		248 |   function_name = &quot;send_to_sqs&quot;
+		249 |   handler       = &quot;index.handler&quot;
+		250 |   runtime       = &quot;nodejs18.x&quot;
+		251 |   filename      = &quot;${path.module}/lambda_send_to_sqs.zip&quot;
+		252 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_send_to_sqs.zip&quot;)
+		253 |   role          = aws_iam_role.lambda_role.arn
+		254 | 
+		255 |   environment {
+		256 |     variables = {
+		257 |       SQS_URL = aws_sqs_queue.iot_alert_queue.id
+		258 |     }
+		259 |   }
+		260 | 
+		261 |     vpc_config {
+		262 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		263 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		264 |   }
+		265 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_26] Ensure all data stored in the SNS topic is encrypted" classname="/main.tf.aws_sns_topic.iot_alert_topic" file="/main.tf">
 			<failure type="failure" message="Ensure all data stored in the SNS topic is encrypted">
 Resource: aws_sns_topic.iot_alert_topic
-File: /main.tf: 226-228
+File: /main.tf: 269-271
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/general-15
 
-		226 | resource &quot;aws_sns_topic&quot; &quot;iot_alert_topic&quot; {
-		227 |   name = &quot;iot_alert_topic&quot;
-		228 | }
+		269 | resource &quot;aws_sns_topic&quot; &quot;iot_alert_topic&quot; {
+		270 |   name = &quot;iot_alert_topic&quot;
+		271 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_173] Check encryption settings for Lambda environmental variable" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf">
 			<failure type="failure" message="Check encryption settings for Lambda environmental variable">
 Resource: aws_lambda_function.sqs_to_sns
-File: /main.tf: 239-252
+File: /main.tf: 282-300
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-5
 
-		239 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
-		240 |   function_name = &quot;sqs_to_sns&quot;
-		241 |   handler       = &quot;index.handler&quot;
-		242 |   runtime       = &quot;nodejs18.x&quot;
-		243 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
-		244 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
-		245 |   role          = aws_iam_role.lambda_role.arn
-		246 | 
-		247 |   environment {
-		248 |     variables = {
-		249 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
-		250 |     }
-		251 |   }
-		252 | }
+		282 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
+		283 |   function_name = &quot;sqs_to_sns&quot;
+		284 |   handler       = &quot;index.handler&quot;
+		285 |   runtime       = &quot;nodejs18.x&quot;
+		286 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
+		287 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
+		288 |   role          = aws_iam_role.lambda_role.arn
+		289 | 
+		290 |   environment {
+		291 |     variables = {
+		292 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
+		293 |     }
+		294 |   }
+		295 | 
+		296 |     vpc_config {
+		297 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		298 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		299 |   }
+		300 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf">
 			<failure type="failure" message="Ensure AWS Lambda function is configured to validate code-signing">
 Resource: aws_lambda_function.sqs_to_sns
-File: /main.tf: 239-252
+File: /main.tf: 282-300
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/bc-aws-272
 
-		239 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
-		240 |   function_name = &quot;sqs_to_sns&quot;
-		241 |   handler       = &quot;index.handler&quot;
-		242 |   runtime       = &quot;nodejs18.x&quot;
-		243 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
-		244 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
-		245 |   role          = aws_iam_role.lambda_role.arn
-		246 | 
-		247 |   environment {
-		248 |     variables = {
-		249 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
-		250 |     }
-		251 |   }
-		252 | }
-</failure>
-		</testcase>
-		<testcase name="[NONE][CKV_AWS_117] Ensure that AWS Lambda function is configured inside a VPC" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf">
-			<failure type="failure" message="Ensure that AWS Lambda function is configured inside a VPC">
-Resource: aws_lambda_function.sqs_to_sns
-File: /main.tf: 239-252
-Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-inside-a-vpc-1
-
-		239 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
-		240 |   function_name = &quot;sqs_to_sns&quot;
-		241 |   handler       = &quot;index.handler&quot;
-		242 |   runtime       = &quot;nodejs18.x&quot;
-		243 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
-		244 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
-		245 |   role          = aws_iam_role.lambda_role.arn
-		246 | 
-		247 |   environment {
-		248 |     variables = {
-		249 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
-		250 |     }
-		251 |   }
-		252 | }
+		282 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
+		283 |   function_name = &quot;sqs_to_sns&quot;
+		284 |   handler       = &quot;index.handler&quot;
+		285 |   runtime       = &quot;nodejs18.x&quot;
+		286 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
+		287 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
+		288 |   role          = aws_iam_role.lambda_role.arn
+		289 | 
+		290 |   environment {
+		291 |     variables = {
+		292 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
+		293 |     }
+		294 |   }
+		295 | 
+		296 |     vpc_config {
+		297 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		298 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		299 |   }
+		300 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_116] Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)">
 Resource: aws_lambda_function.sqs_to_sns
-File: /main.tf: 239-252
+File: /main.tf: 282-300
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-a-dead-letter-queue-dlq
 
-		239 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
-		240 |   function_name = &quot;sqs_to_sns&quot;
-		241 |   handler       = &quot;index.handler&quot;
-		242 |   runtime       = &quot;nodejs18.x&quot;
-		243 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
-		244 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
-		245 |   role          = aws_iam_role.lambda_role.arn
-		246 | 
-		247 |   environment {
-		248 |     variables = {
-		249 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
-		250 |     }
-		251 |   }
-		252 | }
+		282 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
+		283 |   function_name = &quot;sqs_to_sns&quot;
+		284 |   handler       = &quot;index.handler&quot;
+		285 |   runtime       = &quot;nodejs18.x&quot;
+		286 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
+		287 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
+		288 |   role          = aws_iam_role.lambda_role.arn
+		289 | 
+		290 |   environment {
+		291 |     variables = {
+		292 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
+		293 |     }
+		294 |   }
+		295 | 
+		296 |     vpc_config {
+		297 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		298 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		299 |   }
+		300 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_115] Ensure that AWS Lambda function is configured for function-level concurrent execution limit" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for function-level concurrent execution limit">
 Resource: aws_lambda_function.sqs_to_sns
-File: /main.tf: 239-252
+File: /main.tf: 282-300
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-function-level-concurrent-execution-limit
 
-		239 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
-		240 |   function_name = &quot;sqs_to_sns&quot;
-		241 |   handler       = &quot;index.handler&quot;
-		242 |   runtime       = &quot;nodejs18.x&quot;
-		243 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
-		244 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
-		245 |   role          = aws_iam_role.lambda_role.arn
-		246 | 
-		247 |   environment {
-		248 |     variables = {
-		249 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
-		250 |     }
-		251 |   }
-		252 | }
+		282 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
+		283 |   function_name = &quot;sqs_to_sns&quot;
+		284 |   handler       = &quot;index.handler&quot;
+		285 |   runtime       = &quot;nodejs18.x&quot;
+		286 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
+		287 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
+		288 |   role          = aws_iam_role.lambda_role.arn
+		289 | 
+		290 |   environment {
+		291 |     variables = {
+		292 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
+		293 |     }
+		294 |   }
+		295 | 
+		296 |     vpc_config {
+		297 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		298 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		299 |   }
+		300 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_50] X-Ray tracing is enabled for Lambda" classname="/main.tf.aws_lambda_function.sqs_to_sns" file="/main.tf">
 			<failure type="failure" message="X-Ray tracing is enabled for Lambda">
 Resource: aws_lambda_function.sqs_to_sns
-File: /main.tf: 239-252
+File: /main.tf: 282-300
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-4
 
-		239 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
-		240 |   function_name = &quot;sqs_to_sns&quot;
-		241 |   handler       = &quot;index.handler&quot;
-		242 |   runtime       = &quot;nodejs18.x&quot;
-		243 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
-		244 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
-		245 |   role          = aws_iam_role.lambda_role.arn
-		246 | 
-		247 |   environment {
-		248 |     variables = {
-		249 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
-		250 |     }
-		251 |   }
-		252 | }
-</failure>
-		</testcase>
-		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.lambdas[&quot;generate_report&quot;]" file="/main.tf">
-			<failure type="failure" message="Ensure AWS Lambda function is configured to validate code-signing">
-Resource: aws_lambda_function.lambdas[&quot;generate_report&quot;]
-File: /main.tf: 108-125
-Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/bc-aws-272
-
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		282 | resource &quot;aws_lambda_function&quot; &quot;sqs_to_sns&quot; {
+		283 |   function_name = &quot;sqs_to_sns&quot;
+		284 |   handler       = &quot;index.handler&quot;
+		285 |   runtime       = &quot;nodejs18.x&quot;
+		286 |   filename      = &quot;${path.module}/lambda_sqs_to_sns.zip&quot;
+		287 |   source_code_hash = filebase64sha256(&quot;${path.module}/lambda_sqs_to_sns.zip&quot;)
+		288 |   role          = aws_iam_role.lambda_role.arn
+		289 | 
+		290 |   environment {
+		291 |     variables = {
+		292 |       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
+		293 |     }
+		294 |   }
+		295 | 
+		296 |     vpc_config {
+		297 |     subnet_ids         = data.aws_subnet_ids.default.ids
+		298 |     security_group_ids = [aws_security_group.lambda_sg.id]
+		299 |   }
+		300 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_117] Ensure that AWS Lambda function is configured inside a VPC" classname="/main.tf.aws_lambda_function.lambdas[&quot;generate_report&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured inside a VPC">
 Resource: aws_lambda_function.lambdas[&quot;generate_report&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-inside-a-vpc-1
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_116] Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)" classname="/main.tf.aws_lambda_function.lambdas[&quot;generate_report&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)">
 Resource: aws_lambda_function.lambdas[&quot;generate_report&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-a-dead-letter-queue-dlq
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_115] Ensure that AWS Lambda function is configured for function-level concurrent execution limit" classname="/main.tf.aws_lambda_function.lambdas[&quot;generate_report&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for function-level concurrent execution limit">
 Resource: aws_lambda_function.lambdas[&quot;generate_report&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-function-level-concurrent-execution-limit
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_50] X-Ray tracing is enabled for Lambda" classname="/main.tf.aws_lambda_function.lambdas[&quot;generate_report&quot;]" file="/main.tf">
 			<failure type="failure" message="X-Ray tracing is enabled for Lambda">
 Resource: aws_lambda_function.lambdas[&quot;generate_report&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-4
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
-</failure>
-		</testcase>
-		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.lambdas[&quot;get_dashboard&quot;]" file="/main.tf">
-			<failure type="failure" message="Ensure AWS Lambda function is configured to validate code-signing">
-Resource: aws_lambda_function.lambdas[&quot;get_dashboard&quot;]
-File: /main.tf: 108-125
-Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/bc-aws-272
-
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_117] Ensure that AWS Lambda function is configured inside a VPC" classname="/main.tf.aws_lambda_function.lambdas[&quot;get_dashboard&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured inside a VPC">
 Resource: aws_lambda_function.lambdas[&quot;get_dashboard&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-inside-a-vpc-1
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_116] Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)" classname="/main.tf.aws_lambda_function.lambdas[&quot;get_dashboard&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)">
 Resource: aws_lambda_function.lambdas[&quot;get_dashboard&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-a-dead-letter-queue-dlq
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_115] Ensure that AWS Lambda function is configured for function-level concurrent execution limit" classname="/main.tf.aws_lambda_function.lambdas[&quot;get_dashboard&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for function-level concurrent execution limit">
 Resource: aws_lambda_function.lambdas[&quot;get_dashboard&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-function-level-concurrent-execution-limit
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_50] X-Ray tracing is enabled for Lambda" classname="/main.tf.aws_lambda_function.lambdas[&quot;get_dashboard&quot;]" file="/main.tf">
 			<failure type="failure" message="X-Ray tracing is enabled for Lambda">
 Resource: aws_lambda_function.lambdas[&quot;get_dashboard&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-4
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
-</failure>
-		</testcase>
-		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.lambdas[&quot;register_device&quot;]" file="/main.tf">
-			<failure type="failure" message="Ensure AWS Lambda function is configured to validate code-signing">
-Resource: aws_lambda_function.lambdas[&quot;register_device&quot;]
-File: /main.tf: 108-125
-Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/bc-aws-272
-
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_117] Ensure that AWS Lambda function is configured inside a VPC" classname="/main.tf.aws_lambda_function.lambdas[&quot;register_device&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured inside a VPC">
 Resource: aws_lambda_function.lambdas[&quot;register_device&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-inside-a-vpc-1
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_116] Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)" classname="/main.tf.aws_lambda_function.lambdas[&quot;register_device&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)">
 Resource: aws_lambda_function.lambdas[&quot;register_device&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-a-dead-letter-queue-dlq
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_115] Ensure that AWS Lambda function is configured for function-level concurrent execution limit" classname="/main.tf.aws_lambda_function.lambdas[&quot;register_device&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for function-level concurrent execution limit">
 Resource: aws_lambda_function.lambdas[&quot;register_device&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-function-level-concurrent-execution-limit
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_50] X-Ray tracing is enabled for Lambda" classname="/main.tf.aws_lambda_function.lambdas[&quot;register_device&quot;]" file="/main.tf">
 			<failure type="failure" message="X-Ray tracing is enabled for Lambda">
 Resource: aws_lambda_function.lambdas[&quot;register_device&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-4
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
-</failure>
-		</testcase>
-		<testcase name="[NONE][CKV_AWS_272] Ensure AWS Lambda function is configured to validate code-signing" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf">
-			<failure type="failure" message="Ensure AWS Lambda function is configured to validate code-signing">
-Resource: aws_lambda_function.lambdas[&quot;store_metrics&quot;]
-File: /main.tf: 108-125
-Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/bc-aws-272
-
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_117] Ensure that AWS Lambda function is configured inside a VPC" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured inside a VPC">
 Resource: aws_lambda_function.lambdas[&quot;store_metrics&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-inside-a-vpc-1
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_116] Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ)">
 Resource: aws_lambda_function.lambdas[&quot;store_metrics&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-a-dead-letter-queue-dlq
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_115] Ensure that AWS Lambda function is configured for function-level concurrent execution limit" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf">
 			<failure type="failure" message="Ensure that AWS Lambda function is configured for function-level concurrent execution limit">
 Resource: aws_lambda_function.lambdas[&quot;store_metrics&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-aws-lambda-function-is-configured-for-function-level-concurrent-execution-limit
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_50] X-Ray tracing is enabled for Lambda" classname="/main.tf.aws_lambda_function.lambdas[&quot;store_metrics&quot;]" file="/main.tf">
 			<failure type="failure" message="X-Ray tracing is enabled for Lambda">
 Resource: aws_lambda_function.lambdas[&quot;store_metrics&quot;]
-File: /main.tf: 108-125
+File: /main.tf: 145-163
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-serverless-policies/bc-aws-serverless-4
 
-		108 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
-		109 |   for_each         = local.lambdas
-		110 |   function_name    = each.key
-		111 |   filename         = &quot;${path.module}/${each.value}&quot;
-		112 |   handler          = &quot;index.handler&quot;
-		113 |   runtime          = &quot;nodejs18.x&quot;
-		114 |   role             = aws_iam_role.lambda_role.arn
-		115 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
-		116 | 
-		117 |   environment {
-		118 |     variables = {
-		119 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
-		120 |     }
-		121 |   }
-		122 |   
-		123 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
-		124 | 
-		125 | }
+		145 | resource &quot;aws_lambda_function&quot; &quot;lambdas&quot; {
+		146 |   for_each         = local.lambdas
+		147 |   function_name    = each.key
+		148 |   filename         = &quot;${path.module}/${each.value}&quot;
+		149 |   handler          = &quot;index.handler&quot;
+		150 |   runtime          = &quot;nodejs18.x&quot;
+		151 |   role             = aws_iam_role.lambda_role.arn
+		152 |   source_code_hash = filebase64sha256(&quot;${path.module}/${each.value}&quot;)
+		153 | 
+		154 |   environment {
+		155 |     variables = {
+		156 |       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
+		157 |     }
+		158 |   }
+		159 | 
+		160 |   kms_key_arn = aws_kms_key.lambda_env_key.arn
+		161 |   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
+		162 | 
+		163 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV2_AWS_64] Ensure KMS key Policy is defined" classname="/main.tf.aws_kms_key.dynamodb_key" file="/main.tf">
 			<failure type="failure" message="Ensure KMS key Policy is defined">
 Resource: aws_kms_key.dynamodb_key
-File: /main.tf: 64-68
+File: /main.tf: 76-80
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-2-64
 
-		64 | resource &quot;aws_kms_key&quot; &quot;dynamodb_key&quot; {
-		65 |   description             = &quot;CMK for DynamoDB encryption&quot;
-		66 |   deletion_window_in_days = 10
-		67 |   enable_key_rotation     = true
-		68 | }
+		76 | resource &quot;aws_kms_key&quot; &quot;dynamodb_key&quot; {
+		77 |   description             = &quot;CMK for DynamoDB encryption&quot;
+		78 |   deletion_window_in_days = 10
+		79 |   enable_key_rotation     = true
+		80 | }
 </failure>
 		</testcase>
 		<testcase name="[NONE][CKV2_AWS_64] Ensure KMS key Policy is defined" classname="/main.tf.aws_kms_key.lambda_env_key" file="/main.tf">
 			<failure type="failure" message="Ensure KMS key Policy is defined">
 Resource: aws_kms_key.lambda_env_key
-File: /main.tf: 102-106
+File: /main.tf: 114-118
 Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-2-64
 
-		102 | resource &quot;aws_kms_key&quot; &quot;lambda_env_key&quot; {
-		103 |   description             = &quot;KMS key for encrypting Lambda environment variables&quot;
-		104 |   deletion_window_in_days = 10
-		105 |   enable_key_rotation     = true
-		106 | }
+		114 | resource &quot;aws_kms_key&quot; &quot;lambda_env_key&quot; {
+		115 |   description             = &quot;KMS key for encrypting Lambda environment variables&quot;
+		116 |   deletion_window_in_days = 10
+		117 |   enable_key_rotation     = true
+		118 | }
 </failure>
 		</testcase>
 	</testsuite>

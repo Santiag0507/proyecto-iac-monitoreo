@@ -13,6 +13,18 @@ data "aws_iam_policy_document" "lambda_assume_role" {
   }
 }
 
+# Obtener la VPC por defecto
+data "aws_vpc" "default" {
+  default = true
+}
+
+# Obtener todas las subnets de esa VPC
+data "aws_subnet_ids" "default" {
+  vpc_id = data.aws_vpc.default.id
+}
+
+
+
 resource "aws_iam_role" "lambda_role" {
   name               = "lambda-execution-role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
@@ -105,6 +117,31 @@ resource "aws_kms_key" "lambda_env_key" {
   enable_key_rotation     = true
 }
 
+resource "aws_lambda_code_signing_config" "signing_config" {
+  allowed_publishers {
+    signing_profile_version_arns = [
+      "arn:aws:signer:us-east-1:123456789012:signing-profile/my-signing-profile"
+    ]
+  }
+
+  policies {
+    untrusted_artifact_on_deployment = "Enforce"
+  }
+}
+
+resource "aws_security_group" "lambda_sg" {
+  name        = "lambda-security-group"
+  description = "Security group for Lambda"
+  vpc_id      = data.aws_vpc.default.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_lambda_function" "lambdas" {
   for_each         = local.lambdas
   function_name    = each.key
@@ -119,8 +156,9 @@ resource "aws_lambda_function" "lambdas" {
       DYNAMO_TABLE = aws_dynamodb_table.iot_data.name
     }
   }
-  
+
   kms_key_arn = aws_kms_key.lambda_env_key.arn
+  code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
 
 }
 
@@ -219,6 +257,11 @@ resource "aws_lambda_function" "send_to_sqs" {
       SQS_URL = aws_sqs_queue.iot_alert_queue.id
     }
   }
+
+    vpc_config {
+    subnet_ids         = data.aws_subnet_ids.default.ids
+    security_group_ids = [aws_security_group.lambda_sg.id]
+  }
 }
 
 # SNS - Topic de alertas
@@ -249,6 +292,11 @@ resource "aws_lambda_function" "sqs_to_sns" {
       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
     }
   }
+
+    vpc_config {
+    subnet_ids         = data.aws_subnet_ids.default.ids
+    security_group_ids = [aws_security_group.lambda_sg.id]
+  }
 }
 
 # Trigger: SQS → Lambda
@@ -258,3 +306,4 @@ resource "aws_lambda_event_source_mapping" "sqs_trigger" {
   batch_size       = 1
   enabled          = true
 }
+
