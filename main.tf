@@ -166,10 +166,15 @@ resource "aws_lambda_function" "lambdas" {
     subnet_ids         = data.aws_subnet_ids.default.ids
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
-  
+
   dead_letter_config {
     target_arn = aws_sqs_queue.lambda_dlq.arn
   }
+  
+  tracing_config {
+  mode = "Active"
+  }
+
 
 }
 
