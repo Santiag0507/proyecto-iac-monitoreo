@@ -77,7 +77,24 @@ resource "aws_kms_key" "dynamodb_key" {
   description             = "CMK for DynamoDB encryption"
   deletion_window_in_days = 10
   enable_key_rotation     = true
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "default"
+    Statement = [
+      {
+        Sid       = "Enable IAM User Permissions"
+        Effect    = "Allow"
+        Principal = {
+          AWS = "*"
+        }
+        Action    = "kms:*"
+        Resource  = "*"
+      }
+    ]
+  })
 }
+
 
 resource "aws_dynamodb_table" "iot_data" {
   name         = "IoTDataTable"
@@ -170,7 +187,7 @@ resource "aws_lambda_function" "lambdas" {
   dead_letter_config {
     target_arn = aws_sqs_queue.lambda_dlq.arn
   }
-  
+
   tracing_config {
   mode = "Active"
   }
