@@ -172,7 +172,7 @@ resource "aws_lambda_function" "lambdas" {
     subnet_ids         = data.aws_subnet_ids.default.ids
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
-  
+
 }
 
 # ========== API Gateway ==========
@@ -305,8 +305,10 @@ resource "aws_lambda_function" "sqs_to_sns" {
       SNS_TOPIC_ARN = aws_sns_topic.iot_alert_topic.arn
     }
   }
+  
+  kms_key_arn = aws_kms_key.lambda_env_key.arn
 
-    vpc_config {
+  vpc_config {
     subnet_ids         = data.aws_subnet_ids.default.ids
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
