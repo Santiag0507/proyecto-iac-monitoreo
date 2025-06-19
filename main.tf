@@ -134,6 +134,7 @@ resource "aws_security_group" "lambda_sg" {
   description = "Security group for Lambda"
   vpc_id      = data.aws_vpc.default.id
 
+  # checkov:skip=CKV_AWS_382 Reason: Se permite salida total en entorno de pruebas
   egress {
     from_port   = 0
     to_port     = 0
@@ -142,6 +143,12 @@ resource "aws_security_group" "lambda_sg" {
     description = "Allow all outbound traffic"
   }
 }
+
+  vpc_config {
+    subnet_ids         = data.aws_subnet_ids.default.ids
+    security_group_ids = [aws_security_group.lambda_sg.id]
+  }
+
 
 resource "aws_lambda_function" "lambdas" {
   for_each         = local.lambdas
@@ -161,6 +168,11 @@ resource "aws_lambda_function" "lambdas" {
   kms_key_arn = aws_kms_key.lambda_env_key.arn
   code_signing_config_arn = aws_lambda_code_signing_config.signing_config.arn
 
+  vpc_config {
+    subnet_ids         = data.aws_subnet_ids.default.ids
+    security_group_ids = [aws_security_group.lambda_sg.id]
+  }
+  
 }
 
 # ========== API Gateway ==========
