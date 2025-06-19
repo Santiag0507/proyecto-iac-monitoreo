@@ -352,6 +352,8 @@ resource "aws_lambda_function" "send_to_sqs" {
     subnet_ids         = data.aws_subnet_ids.default.ids
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
+
+  **kms_key_arn = aws_kms_key.lambda_env_key.arn**
 }
 
 # SNS - Topic de alertas
